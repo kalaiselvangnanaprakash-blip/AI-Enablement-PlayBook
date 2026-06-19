@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Enablement Playbook — Learn, Build &amp; Work with AI</title>
+<style>
+  :root{
+    --navy:#0E1E3F;--navy-2:#16284A;--ink:#14233F;
+    --blue:#2B5BD7;--blue-deep:#1B3A8C;--blue-soft:#EAF0FC;--blue-line:#C9D8F5;
+    --purple:#7A3FC0;--purple-soft:#F0EAFB;
+    --red:#D62839;--red-deep:#A11321;--red-soft:#FCEBED;--red-line:#F0C2C8;
+    --page-a:#F5F7FB;--page-b:#FBFCFE;--card:#FFFFFF;
+    --body:#43506A;--muted:#7C879C;--border:#E4E8F0;--border-2:#EEF1F7;
+    --green:#1F8A52;--green-soft:#E5F4EC;
+    --code-bg:#101B30;--code-fg:#E6EAF2;--code-key:#FF8A9A;--code-str:#7FB6FF;--code-com:#7C879C;
+    --display:Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,'Cascadia Code','Source Code Pro',Consolas,'Courier New',monospace;
+    --shadow:0 1px 2px rgba(16,27,48,.05),0 10px 28px rgba(16,27,48,.07);
+    --side-w:272px;--side-c:74px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--body);background:linear-gradient(160deg,var(--page-a),var(--page-b));line-height:1.62;-webkit-font-smoothing:antialiased}
+
+  /* Sidebar */
+  .sidebar{position:fixed;top:0;left:0;width:var(--side-w);height:100vh;z-index:60;background:linear-gradient(180deg,#13254c,#0c1830);color:#fff;border-right:1px solid #07101f;display:flex;flex-direction:column;overflow-y:auto;transition:width .22s ease}
+  .sidebar::-webkit-scrollbar{width:8px}.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:8px}
+  .side-brand{display:flex;align-items:center;gap:12px;padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+  .side-brand .logo{width:42px;height:42px;border-radius:12px;flex-shrink:0;background:linear-gradient(135deg,var(--blue) 0%,#4a40c0 50%,var(--red) 100%);box-shadow:0 0 0 1px rgba(255,255,255,.07),0 6px 18px rgba(43,91,215,.4);display:flex;align-items:center;justify-content:center}
+  .side-brand .logo svg{width:22px;height:22px}
+  .side-brand .bt .name{font-weight:700;font-size:15.5px;letter-spacing:.2px;line-height:1.15}
+  .side-brand .bt .sub{font-size:10.5px;color:#9bb0d4;letter-spacing:.3px;margin-top:2px}
+  .side-nav{flex:1;padding:8px 12px 12px;display:flex;flex-direction:column;gap:2px}
+  .nav-group{font-size:10px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:#7188ad;padding:14px 12px 5px}
+  .snav{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;color:#cdd7ea;font-family:var(--sans);font-size:13.5px;font-weight:600;text-align:left;padding:9px 12px;border-radius:10px;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+  .snav .ic{width:22px;height:22px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#8ea4c9}
+  .snav .ic svg{width:20px;height:20px}
+  .snav:hover{background:rgba(255,255,255,.08);color:#fff}.snav:hover .ic{color:#fff}
+  .snav.active{background:var(--blue);color:#fff}.snav.active .ic{color:#fff}
+  .snav:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+  .snav .dot{margin-left:auto;width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0}
+  /* nested program sub-nav */
+  .snav-parent .caret{margin-left:auto;display:flex;transition:transform .22s}
+  .snav-parent .caret svg{width:15px;height:15px}
+  .snav-parent.open .caret{transform:rotate(180deg)}
+  .snav-parent.section-active{background:rgba(255,255,255,.07);color:#fff}
+  .snav-parent.section-active .ic{color:#fff}
+  .subnav{display:none;flex-direction:column;gap:2px;margin:2px 0 4px;padding-left:6px;border-left:1px solid rgba(255,255,255,.09);margin-left:18px}
+  .subnav.open{display:flex}
+  .snav.sub{padding:7px 10px;font-size:12.7px;font-weight:600;color:#b9c6df}
+  .snav.sub .wkn{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.1);color:#cdd7ea;font-size:11px;font-weight:700;font-family:var(--display);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:11px}
+  .snav.sub:hover{background:rgba(255,255,255,.08);color:#fff}
+  .snav.sub.active{background:var(--blue);color:#fff}
+  .snav.sub.active .wkn{background:#fff;color:var(--blue)}
+  body.collapsed .subnav{display:none !important}
+  body.collapsed .snav-parent .caret{display:none}
+  @media(max-width:900px){body.collapsed .subnav.open{display:flex !important}body.collapsed .snav-parent .caret{display:flex}}
+  .step{cursor:pointer;transition:transform .12s,box-shadow .12s}
+  .step:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(16,27,48,.12)}
+  .collapse-btn{display:flex;align-items:center;gap:12px;margin:10px 12px 4px;padding:9px 12px;border:0;border-radius:10px;background:rgba(255,255,255,.06);color:#9bb0d4;font-family:var(--sans);font-weight:600;font-size:13px;cursor:pointer;transition:.15s}
+  .collapse-btn:hover{background:rgba(255,255,255,.12);color:#fff}
+  .collapse-btn .ic{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+  .collapse-btn .chev{transition:transform .22s}
+  body.collapsed .sidebar{width:var(--side-c)}
+  body.collapsed .content{margin-left:var(--side-c)}
+  body.collapsed .side-brand{justify-content:center;padding:18px 0 14px}
+  body.collapsed .side-brand .bt{display:none}
+  body.collapsed .nav-group{font-size:0;border-top:1px solid rgba(255,255,255,.08);margin:8px 12px 4px;padding:0;height:0;overflow:hidden}
+  body.collapsed .snav{justify-content:center;padding:9px 0;gap:0}
+  body.collapsed .snav .lbl,body.collapsed .snav .dot{display:none}
+  body.collapsed .collapse-btn{justify-content:center;gap:0}
+  body.collapsed .collapse-btn .lbl{display:none}
+  body.collapsed .collapse-btn .chev{transform:rotate(180deg)}
+
+  /* Content */
+  .content{margin-left:var(--side-w);transition:margin .22s ease;min-height:100vh}
+  .topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;padding:12px 30px;min-height:56px;background:rgba(251,252,254,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+  .topbar:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),#5b7fe0 40%,var(--red))}
+  .menu-btn{display:none;width:38px;height:38px;border:1px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;align-items:center;justify-content:center;color:var(--ink)}
+  .crumb{font-family:var(--display);font-weight:700;color:var(--ink);font-size:16px}
+  .topbar .spacer{flex:1}
+  .topbar .edition{display:flex;align-items:center;gap:7px;background:var(--blue-soft);color:var(--blue-deep);border:1px solid var(--blue-line);font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;white-space:nowrap}
+  .topbar .edition .dot{width:7px;height:7px;border-radius:50%;background:var(--red)}
+  .backdrop{display:none;position:fixed;inset:0;background:rgba(8,14,28,.5);z-index:55}
+
+  .wrap{max-width:1000px;margin:0 auto;padding:40px 30px 90px}
+  .panel{display:none;animation:fade .35s ease}.panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--blue);margin:0 0 10px}
+  .eyebrow.red{color:var(--red)}.eyebrow.purple{color:var(--purple)}
+  h1{font-family:var(--display);color:var(--ink);font-weight:700;font-size:35px;line-height:1.14;margin:0 0 14px;letter-spacing:-.3px}
+  h2{font-family:var(--display);color:var(--ink);font-weight:700;font-size:24px;line-height:1.2;margin:42px 0 14px}
+  h3{font-family:var(--sans);color:var(--ink);font-weight:700;font-size:17px;margin:26px 0 8px;letter-spacing:.1px}
+  p{margin:0 0 14px;max-width:74ch}
+  .lead{font-size:18px;color:#37445e;max-width:72ch}
+  a{color:var(--blue)}strong{color:var(--ink)}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 26px;box-shadow:var(--shadow);margin:18px 0}
+  .grid{display:grid;gap:18px;margin:18px 0}
+  .grid.two{grid-template-columns:1fr 1fr}.grid.three{grid-template-columns:repeat(3,1fr)}.grid.four{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.grid.two,.grid.three,.grid.four{grid-template-columns:1fr}}
+  .mini{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
+  .mini h3{margin:0 0 6px}.mini p{font-size:14.5px;margin:0;color:var(--body)}
+  .mini .ic{width:34px;height:34px;border-radius:9px;background:var(--blue-soft);color:var(--blue-deep);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:var(--display);margin-bottom:12px;font-size:16px}
+  .mini.r .ic{background:var(--red-soft);color:var(--red-deep)}.mini.p .ic{background:var(--purple-soft);color:var(--purple)}
+
+  .spine{list-style:none;padding:0;margin:20px 0;counter-reset:s}
+  .spine li{position:relative;padding:0 0 22px 56px;counter-increment:s}
+  .spine li:before{content:counter(s);position:absolute;left:0;top:-2px;width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;font-family:var(--display);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(16,27,48,.2)}
+  .spine li:after{content:"";position:absolute;left:17px;top:36px;bottom:2px;width:2px;background:linear-gradient(var(--border),transparent)}
+  .spine li:last-child:after{display:none}
+  .spine li .t{font-weight:700;color:var(--ink);display:block;margin-bottom:3px}.spine li p{margin:0;font-size:14.5px}
+
+  pre{background:var(--code-bg);color:var(--code-fg);border-radius:13px;padding:18px 20px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.6;margin:14px 0;border:1px solid #1d2c47}
+  pre .c{color:var(--code-com)} pre .k{color:var(--code-key)} pre .s{color:var(--code-str)}
+  code{font-family:var(--mono);font-size:.9em;background:#e9eef7;color:#1b3a8c;padding:2px 6px;border-radius:5px}
+  pre code{background:none;color:inherit;padding:0}
+
+  .label{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 9px;border-radius:6px;margin-bottom:8px}
+  .label.prompt{background:#1c2c49;color:#cdd7ea}.label.bad{background:var(--red-soft);color:var(--red-deep)}.label.good{background:var(--green-soft);color:var(--green)}
+
+  .recipe{display:grid;grid-template-columns:1.15fr .85fr;gap:0;border-radius:15px;overflow:hidden;border:1px solid var(--border);margin:18px 0;box-shadow:var(--shadow)}
+  @media(max-width:820px){.recipe{grid-template-columns:1fr}}
+  .pane-dark{background:var(--navy);color:#dfe6f3;padding:22px 24px;font-family:var(--mono);font-size:13px;line-height:1.65}
+  .pane-dark .pt{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#7fb6ff;margin-bottom:12px}
+  .pane-soft{background:var(--blue-soft);padding:22px 24px;border-left:1px solid var(--blue-line)}
+  @media(max-width:820px){.pane-soft{border-left:0;border-top:1px solid var(--blue-line)}}
+  .pane-soft .pt{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue-deep);margin-bottom:10px}
+  .pane-soft p{font-size:14px;color:#2f3f63;margin:0 0 8px}.pane-soft ul{margin:0;padding-left:18px}.pane-soft li{font-size:14px;color:#2f3f63;margin-bottom:5px}
+
+  .handson{border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:16px 0;box-shadow:var(--shadow);background:var(--card)}
+  .handson-head{display:flex;align-items:center;gap:12px;padding:13px 20px;background:#f3f6fc;border-bottom:1px solid var(--border)}
+  .handson-head .ttl{font-weight:700;color:var(--ink);font-size:15px}
+  .level{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:4px 10px;border-radius:999px;flex-shrink:0}
+  .level.start{background:var(--blue-soft);color:var(--blue-deep);border:1px solid var(--blue-line)}
+  .level.adv{background:var(--red-soft);color:var(--red-deep);border:1px solid var(--red-line)}
+  .handson-body{padding:18px 20px}.handson-body p{margin:0 0 10px;font-size:14.5px}.handson-body p:last-child{margin-bottom:0}.handson-body pre{margin:10px 0 0}
+
+  .callout{border-radius:13px;padding:18px 20px 18px 22px;margin:18px 0;border:1px solid var(--border);background:var(--card);position:relative;box-shadow:var(--shadow)}
+  .callout:before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:4px;background:var(--blue)}
+  .callout h3{margin:0 0 6px;font-size:15px}.callout p{margin:0;font-size:14.5px}
+  .callout.warn:before{background:var(--red)}.callout.warn{background:var(--red-soft);border-color:var(--red-line)}.callout.warn h3{color:var(--red-deep)}
+  .callout.tip:before{background:var(--green)}.callout.tip{background:var(--green-soft);border-color:#bfe3cd}.callout.tip h3{color:#176b40}
+  .callout.big{padding:22px 24px 22px 26px}.callout.big p{font-size:16px}
+
+  table.cmp{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;background:var(--card);border-radius:13px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border)}
+  table.cmp th{background:#f1f4fa;text-align:left;padding:12px 16px;color:var(--ink);font-weight:700;font-size:12.5px;letter-spacing:.4px;border-bottom:1px solid var(--border)}
+  table.cmp td{padding:12px 16px;border-bottom:1px solid var(--border-2);vertical-align:top}
+  table.cmp tr:last-child td{border-bottom:0}table.cmp td:first-child{font-weight:600;color:var(--ink);width:28%}
+
+  ul.clean{padding-left:20px;margin:10px 0 16px}ul.clean li{margin-bottom:7px;max-width:72ch}
+
+  .phase{display:flex;gap:18px;align-items:flex-start;margin:0 0 18px;padding:20px 22px;background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow)}
+  .phase .pn{flex-shrink:0;width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:22px;color:#fff}
+  .phase.p1 .pn{background:linear-gradient(135deg,var(--blue),#4a40c0)}.phase.p2 .pn{background:linear-gradient(135deg,#4a40c0,#8e3296)}.phase.p3 .pn{background:linear-gradient(135deg,#8e3296,var(--red))}
+  .phase .pc h3{margin:0 0 4px}.phase .pc .meta{font-size:12.5px;color:var(--muted);font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-bottom:8px}
+  .phase .pc p{margin:0 0 8px;font-size:14.5px}.phase .pc ul{margin:6px 0 0;padding-left:18px}.phase .pc li{font-size:14px;margin-bottom:5px}
+
+  .res-link{display:flex;gap:14px;align-items:flex-start;padding:15px 0;border-bottom:1px solid var(--border-2)}
+  .res-link:last-child{border-bottom:0}
+  .res-link .num{font-family:var(--display);font-weight:700;color:var(--blue);font-size:18px;width:26px;flex-shrink:0}
+  .res-link .body h3{margin:0 0 3px}.res-link .body h3 a{text-decoration:none}.res-link .body h3 a:hover{text-decoration:underline}
+  .res-link .body p{margin:0;font-size:14px}.res-link .body .url{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:4px;display:inline-block;word-break:break-all}
+
+  .tipgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+  @media(max-width:820px){.tipgrid{grid-template-columns:1fr}}
+  .tipc{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:16px 18px;box-shadow:var(--shadow);display:flex;gap:13px}
+  .tipc .tn{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--blue-soft);color:var(--blue-deep);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;font-family:var(--display)}
+  .tipc.r .tn{background:var(--red-soft);color:var(--red-deep)}
+  .tipc h3{margin:0 0 3px;font-size:14.5px}.tipc p{margin:0;font-size:13.5px}.tipc code{font-size:11.5px}
+  .grp-label{font-family:var(--sans);font-weight:700;color:var(--ink);font-size:13px;letter-spacing:.6px;text-transform:uppercase;margin:28px 0 6px;display:flex;align-items:center;gap:12px}
+  .grp-label:after{content:"";flex:1;height:1px;background:var(--border)}
+
+  .ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
+  @media(max-width:820px){.ladder{grid-template-columns:1fr 1fr}}@media(max-width:520px){.ladder{grid-template-columns:1fr}}
+  .rung{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .rung:before{content:"";position:absolute;top:0;left:0;right:0;height:4px}
+  .rung.l1:before{background:#9db6ea}.rung.l2:before{background:var(--blue)}.rung.l3:before{background:#8e3296}.rung.l4:before{background:var(--red)}
+  .rung .lv{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+  .rung h3{margin:3px 0 8px;font-size:16px}.rung p{font-size:13.5px;margin:0 0 8px}.rung .nx{font-size:13px;color:var(--blue-deep);font-weight:600}
+
+  /* SVG wrap */
+  .svgwrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:16px;background:var(--card);box-shadow:var(--shadow);padding:10px}
+  .svgwrap svg{display:block;width:100%;height:auto}
+  .svgwrap.road svg{min-width:720px}
+  .svgwrap.center{max-width:460px;margin:20px auto}
+  .cap{font-size:12.5px;color:var(--muted);text-align:center;margin:8px 0 2px}
+  .chip{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.4px;padding:3px 8px;border-radius:6px}
+  .chip.pass{background:var(--green-soft);color:#176b40}.chip.fail{background:var(--red-soft);color:var(--red-deep)}
+  .matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+  @media(max-width:560px){.matrix{grid-template-columns:1fr}}
+  .mq{border:1px solid var(--border);border-radius:13px;padding:15px 16px;box-shadow:var(--shadow);background:var(--card);border-top:4px solid var(--border)}
+  .mq.do{border-top-color:var(--red)}.mq.sched{border-top-color:var(--blue)}.mq.deleg{border-top-color:#E8951F}.mq.elim{border-top-color:var(--muted)}
+  .mq .qh{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+  .mq h3{margin:2px 0 6px;font-size:15px}.mq p{font-size:13px;margin:0}
+  table.cmp td .chip{margin:0}
+
+  /* week stepper */
+  .stepper{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin:18px 0}
+  @media(max-width:860px){.stepper{grid-template-columns:repeat(4,1fr)}}@media(max-width:430px){.stepper{grid-template-columns:repeat(2,1fr)}}
+  .step{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:14px 10px;box-shadow:var(--shadow);text-align:center}
+  .step .wn{width:30px;height:30px;border-radius:50%;margin:0 auto 8px;color:#fff;font-family:var(--display);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .step .wf{font-size:12px;font-weight:700;color:var(--ink);line-height:1.3}
+
+  .weekcard{border:1px solid var(--border);border-radius:15px;overflow:hidden;margin:16px 0;box-shadow:var(--shadow);background:var(--card)}
+  .weekcard .wh{display:flex;align-items:center;gap:14px;padding:13px 18px;border-bottom:1px solid var(--border);background:#f3f6fc}
+  .weekcard .wb{width:34px;height:34px;border-radius:9px;color:#fff;font-family:var(--display);font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+  .weekcard .wt{font-weight:700;color:var(--ink);font-size:15.5px}
+  .weekcard .wo{margin-left:auto;font-size:12px;color:var(--blue-deep);font-weight:600;background:var(--blue-soft);border:1px solid var(--blue-line);padding:4px 10px;border-radius:999px;white-space:nowrap}
+  .weekcard .wbody{padding:16px 18px}.weekcard .wbody p{font-size:14px;margin:0 0 10px}.weekcard .wbody p:last-child{margin-bottom:0}
+  .topics{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+  .topics span{font-size:12px;background:#eef1f7;color:#3a4664;border-radius:999px;padding:3px 10px}
+  @media(max-width:600px){.weekcard .wo{display:none}}
+
+  .toolcard{border:1px solid var(--border);border-radius:15px;padding:20px 22px;box-shadow:var(--shadow);background:var(--card);margin:16px 0}
+  .toolcard .th{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .toolcard .badge{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-family:var(--display);font-size:15px;flex-shrink:0;letter-spacing:.5px}
+  .toolcard h3{margin:0;font-size:17px}.toolcard .sub{font-size:12.5px;color:var(--muted);font-weight:600}
+  .toolcard p{font-size:14px;margin:0 0 10px}
+
+  .cheat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+  @media(max-width:880px){.cheat{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.cheat{grid-template-columns:1fr}}
+  .ccard{border:1px solid var(--border);border-radius:13px;padding:14px 16px;box-shadow:var(--shadow);background:var(--card);position:relative;overflow:hidden}
+  .ccard:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue)}
+  .ccard.r:before{background:var(--red)}.ccard.p:before{background:var(--purple)}.ccard.g:before{background:var(--green)}
+  .ccard h4{margin:6px 0 8px;font-size:13px;color:var(--ink);font-weight:700;letter-spacing:.3px;text-transform:uppercase}
+  .ccard ul{margin:0;padding-left:15px}.ccard li{font-size:12.5px;margin-bottom:4px;color:var(--body)}
+  .ccard .mono{font-family:var(--mono);font-size:11px;color:#1b3a8c;background:#eef2fb;border-radius:5px;padding:2px 5px;display:inline-block;margin:1px 0}
+
+  .toc-pill{display:inline-flex;gap:8px;flex-wrap:wrap;margin:6px 0 0}
+  .toc-pill button{appearance:none;border:1px solid var(--border);background:var(--card);border-radius:999px;padding:7px 14px;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;transition:.15s}
+  .toc-pill button:hover{border-color:var(--blue);color:var(--blue)}
+
+  .footer{padding:30px 30px 60px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);max-width:1000px;margin:20px auto 0}
+  .footer strong{color:var(--ink)}
+
+  @media(max-width:900px){
+    .sidebar{transform:translateX(-100%);transition:transform .25s ease;width:var(--side-w)}
+    body.navopen .sidebar{transform:none}body.navopen .backdrop{display:block}
+    .content{margin-left:0 !important}.menu-btn{display:inline-flex}.collapse-btn{display:none}
+    body.collapsed .sidebar{width:var(--side-w)}
+    body.collapsed .side-brand{justify-content:flex-start;padding:18px 16px 14px}body.collapsed .side-brand .bt{display:block}
+    body.collapsed .nav-group{font-size:10px;border:0;margin:0;height:auto;padding:14px 12px 5px;overflow:visible}
+    body.collapsed .snav{justify-content:flex-start;padding:9px 12px;gap:12px}body.collapsed .snav .lbl,body.collapsed .snav .dot{display:flex}
+  }
+  @media(max-width:600px){h1{font-size:28px}.wrap{padding:30px 18px 70px}.topbar{padding:12px 18px}.phase{flex-direction:column;gap:12px}}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="side-brand">
+    <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5l2.4 5.6 5.6 2.4-5.6 2.4L12 18.5l-2.4-5.6L4 10.5l5.6-2.4z" fill="#fff"/><circle cx="18.5" cy="18.5" r="2.3" fill="#fff" opacity=".85"/></svg></div>
+    <div class="bt"><div class="name">AI Enablement Playbook</div><div class="sub">Learn · Build · Work with AI</div></div>
+  </div>
+  <button class="collapse-btn" id="collapseBtn" aria-label="Collapse sidebar"><span class="ic"><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span><span class="lbl">Collapse menu</span></button>
+  <nav class="side-nav" id="nav" role="tablist" aria-label="Sections">
+    <div class="nav-group">Start</div>
+    <button class="snav active" data-target="overview" role="tab" title="Overview"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="lbl">Overview</span></button>
+    <button class="snav" data-target="roadmap" role="tab" title="Roadmap"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18l4-13 5 3 5-3 4 13"/><circle cx="7" cy="5" r="1.4"/><circle cx="17" cy="5" r="1.4"/></svg></span><span class="lbl">Roadmap</span><span class="dot"></span></button>
+
+    <div class="nav-group">Learn</div>
+    <button class="snav" data-target="plan" role="tab" title="Plan &amp; Approach"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.3"/><circle cx="18" cy="18" r="2.3"/><path d="M8.2 6H14a3.5 3.5 0 0 1 0 7H9a3.5 3.5 0 0 0-3 4.8"/></svg></span><span class="lbl">Plan &amp; Approach</span></button>
+    <button class="snav snav-parent" data-target="program" role="tab" title="8-Week Program" aria-expanded="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></span><span class="lbl">8-Week Program</span><span class="caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></button>
+    <div class="subnav" id="sub-program">
+      <button class="snav sub" data-target="wk1" role="tab"><span class="wkn">1</span><span class="lbl">AI &amp; Prompt Basics</span></button>
+      <button class="snav sub" data-target="wk2" role="tab"><span class="wkn">2</span><span class="lbl">Techniques &amp; Iteration</span></button>
+      <button class="snav sub" data-target="wk3" role="tab"><span class="wkn">3</span><span class="lbl">Tools &amp; Prompt Library</span></button>
+      <button class="snav sub" data-target="wk4" role="tab"><span class="wkn">4</span><span class="lbl">Excel Essentials</span></button>
+      <button class="snav sub" data-target="wk5" role="tab"><span class="wkn">5</span><span class="lbl">Excel Power Skills</span></button>
+      <button class="snav sub" data-target="wk6" role="tab"><span class="wkn">6</span><span class="lbl">Email &amp; Comms</span></button>
+      <button class="snav sub" data-target="wk7" role="tab"><span class="wkn">7</span><span class="lbl">Meetings &amp; MoM</span></button>
+      <button class="snav sub" data-target="wk8" role="tab"><span class="wkn">8</span><span class="lbl">Productivity &amp; Project</span></button>
+      <button class="snav sub" data-target="wkrubric" role="tab"><span class="wkn">★</span><span class="lbl">Rubric &amp; Scoring</span></button>
+    </div>
+    <button class="snav" data-target="prompting" role="tab" title="Prompting"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-4 4V5a1 1 0 0 1 1-1z"/></svg></span><span class="lbl">Prompting</span></button>
+    <button class="snav" data-target="context" role="tab" title="Context Engineering"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4-8 4-8-4 8-4z"/><path d="M4 12l8 4 8-4"/><path d="M4 16.5l8 4 8-4"/></svg></span><span class="lbl">Context Engineering</span></button>
+    <button class="snav" data-target="tricks" role="tab" title="Tips &amp; Tricks"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.4c.8.7 1 1.4 1 2.6h6c0-1.2.2-1.9 1-2.6A6 6 0 0 0 12 3z"/></svg></span><span class="lbl">Tips &amp; Tricks</span></button>
+
+    <div class="nav-group">Build</div>
+    <button class="snav" data-target="mdprompts" role="tab" title="Master Prompts (.md)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11l3 3v15H5z"/><path d="M8 12v4M8 12l2 2 2-2v4M15 12v4M13 14h2"/></svg></span><span class="lbl">Master Prompts (.md)</span><span class="dot"></span></button>
+    <button class="snav" data-target="tools" role="tab" title="AI Dev Tools"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v12H4z"/><path d="M7 9l2 2-2 2M12 13h4"/></svg></span><span class="lbl">AI Dev Tools</span><span class="dot"></span></button>
+    <button class="snav" data-target="agent" role="tab" title="Build an Agent"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="8" width="12" height="9" rx="2"/><path d="M12 4v4M9 12h.01M15 12h.01M3 12h3M18 12h3"/></svg></span><span class="lbl">Build an Agent</span><span class="dot"></span></button>
+    <button class="snav" data-target="skills" role="tab" title="Claude Skills"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4a2 2 0 1 1 4 0v1h3a1 1 0 0 1 1 1v3h1a2 2 0 1 1 0 4h-1v3a1 1 0 0 1-1 1h-3v-1a2 2 0 1 0-4 0v1H7a1 1 0 0 1-1-1v-3H5a2 2 0 1 1 0-4h1V6a1 1 0 0 1 1-1h3z"/></svg></span><span class="lbl">Claude Skills</span><span class="dot"></span></button>
+    <button class="snav" data-target="advances" role="tab" title="AI Advancements"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg></span><span class="lbl">AI Advancements</span></button>
+
+    <div class="nav-group">Apply</div>
+    <button class="snav" data-target="sql" role="tab" title="SQL &amp; Procedures"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.66 3.13 3 7 3s7-1.34 7-3V5"/><path d="M5 11v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6"/></svg></span><span class="lbl">SQL &amp; Procedures</span></button>
+    <button class="snav" data-target="recon" role="tab" title="Recon Testing"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span><span class="lbl">Recon Testing</span></button>
+    <button class="snav" data-target="errors" role="tab" title="Errors &amp; Fixes"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="9" width="10" height="10" rx="5"/><path d="M12 5v4M9 6l1.6 2M15 6l-1.6 2M4 13h3M17 13h3M4.5 18l2.5-1.4M19.5 18 17 16.6"/></svg></span><span class="lbl">Errors &amp; Fixes</span></button>
+    <button class="snav" data-target="productivity" role="tab" title="Productivity &amp; Comms"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 5 14h6l-1 7 8-11h-6l1-7z"/></svg></span><span class="lbl">Productivity &amp; Comms</span></button>
+
+    <div class="nav-group">Reference</div>
+    <button class="snav" data-target="cheat" role="tab" title="Cheat Sheet"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></span><span class="lbl">Cheat Sheet</span><span class="dot"></span></button>
+    <button class="snav" data-target="learning" role="tab" title="Courses"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l10 5-10 5L2 9l10-5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></span><span class="lbl">Courses</span></button>
+  </nav>
+</aside>
+
+<div class="backdrop" id="backdrop"></div>
+
+<div class="content">
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <span class="crumb" id="crumb">Overview</span>
+    <span class="spacer"></span>
+    <span class="edition"><span class="dot"></span>Master Edition · v5.2</span>
+  </header>
+
+  <main class="wrap">
+
+  <!-- OVERVIEW -->
+  <section class="panel active" id="overview" role="tabpanel">
+    <p class="eyebrow">Executive Enablement</p>
+    <h1>Learn AI well, build with it, and work faster — one playbook.</h1>
+    <p class="lead">A practical guide to becoming AI-enabled: a clear roadmap, a structured 8-week program, the foundations of prompting and context, the tools to build with (Claude Code, Codex, Gemini/Firebase), a pathway to create your own agent, and a one-page cheat sheet. Executive in tone, visual where it helps, and hands-on throughout.</p>
+
+    <div class="grid three">
+      <div class="mini"><div class="ic">→</div><h3>Start with the Roadmap</h3><p>See the journey from first prompt to AI-enabled professional, with milestones.</p></div>
+      <div class="mini p"><div class="ic">8w</div><h3>Follow the Program</h3><p>A structured 8-week curriculum — AI, Excel, communication, planning, a real project.</p></div>
+      <div class="mini r"><div class="ic">⚙</div><h3>Then Build</h3><p>Use AI coding tools and create your first agent with a clear, safe pathway.</p></div>
+    </div>
+
+    <h2>How this playbook is organised</h2>
+    <table class="cmp">
+      <tr><th>Group</th><th>What's inside</th></tr>
+      <tr><td>Start</td><td>Overview · the visual Roadmap to becoming AI-enabled.</td></tr>
+      <tr><td>Learn</td><td>How to learn · the 8-Week Program · Prompting · Context · Tips &amp; Tricks.</td></tr>
+      <tr><td>Build</td><td>AI Dev Tools (Claude Code, Codex, Gemini/Firebase) · Build an Agent · what's new in AI.</td></tr>
+      <tr><td>Apply</td><td>SQL, Reconciliation testing, debugging, and productivity for data &amp; QA work.</td></tr>
+      <tr><td>Reference</td><td>A visual Cheat Sheet · free official courses.</td></tr>
+    </table>
+
+    <h2>Ground rules — read once</h2>
+    <div class="callout warn"><h3>Never share secrets or live personal data</h3><p>No passwords, keys, connection strings, or real customer/personal data. Share structure and anonymised samples only.</p></div>
+    <div class="callout"><h3>Verify before you trust or run</h3><p>AI drafts; you decide. Read generated code/SQL before running, and never run unreviewed changes against production. AI can be confidently wrong.</p></div>
+    <div class="toc-pill"><button data-go="roadmap">→ See the Roadmap</button><button data-go="program">→ The 8-Week Program</button><button data-go="cheat">→ Cheat Sheet</button></div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="panel" id="roadmap" role="tabpanel">
+    <p class="eyebrow purple">Your Journey</p>
+    <h1>Roadmap to becoming an AI-enabled professional</h1>
+    <p class="lead">Six milestones, one direction. You don't jump to the end — you climb one rung at a time, on real work. Here's the whole path at a glance.</p>
+
+    <div class="svgwrap road">
+      <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Roadmap from Curious to AI-Enabled Professional">
+        <defs>
+          <linearGradient id="rg" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#9db6ea"/><stop offset="0.5" stop-color="#2B5BD7"/><stop offset="0.8" stop-color="#7A3FC0"/><stop offset="1" stop-color="#D62839"/>
+          </linearGradient>
+        </defs>
+        <!-- track -->
+        <rect x="60" y="138" width="880" height="14" rx="7" fill="url(#rg)"/>
+        <line x1="70" y1="145" x2="930" y2="145" stroke="#fff" stroke-width="2" stroke-dasharray="2 12" opacity="0.7"/>
+        <!-- stations: x = 95,257,419,581,743,905 -->
+        <g font-family="Georgia, serif">
+          <!-- 1 -->
+          <circle cx="95" cy="145" r="26" fill="#9db6ea"/><text x="95" y="152" text-anchor="middle" fill="#0E1E3F" font-weight="700" font-size="18">1</text>
+          <text x="95" y="200" text-anchor="middle" fill="#14233F" font-family="-apple-system,Segoe UI,sans-serif" font-weight="700" font-size="15">Curious</text>
+          <text x="95" y="218" text-anchor="middle" fill="#7C879C" font-family="-apple-system,Segoe UI,sans-serif" font-size="11">first prompts</text>
+          <!-- 2 -->
+          <circle cx="257" cy="145" r="26" fill="#5b7fe0"/><text x="257" y="152" text-anchor="middle" fill="#fff" font-weight="700" font-size="18">2</text>
+          <text x="257" y="92" text-anchor="middle" fill="#14233F" font-family="-apple-system,Segoe UI,sans-serif" font-weight="700" font-size="15">Fluent</text>
+          <text x="257" y="110" text-anchor="middle" fill="#7C879C" font-family="-apple-system,Segoe UI,sans-serif" font-size="11">daily use · prompt library</text>
+          <!-- 3 -->
+          <circle cx="419" cy="145" r="26" fill="#2B5BD7"/><text x="419" y="152" text-anchor="middle" fill="#fff" font-weight="700" font-size="18">3</text>
+          <text x="419" y="200" text-anchor="middle" fill="#14233F" font-family="-apple-system,Segoe UI,sans-serif" font-weight="700" font-size="15">Skilled</text>
+          <text x="419" y="218" text-anchor="middle" fill="#7C879C" font-family="-apple-system,Segoe UI,sans-serif" font-size="11">Excel · SQL · comms</text>
+          <!-- 4 -->
+          <circle cx="581" cy="145" r="26" fill="#6a4bc4"/><text x="581" y="152" text-anchor="middle" fill="#fff" font-weight="700" font-size="18">4</text>
+          <text x="581" y="92" text-anchor="middle" fill="#14233F" font-family="-apple-system,Segoe UI,sans-serif" font-weight="700" font-size="15">Power User</text>
+          <text x="581" y="110" text-anchor="middle" fill="#7C879C" font-family="-apple-system,Segoe UI,sans-serif" font-size="11">chaining · self-critique · templates</text>
+          <!-- 5 -->
+          <circle cx="743" cy="145" r="26" fill="#a3338f"/><text x="743" y="152" text-anchor="middle" fill="#fff" font-weight="700" font-size="18">5</text>
+          <text x="743" y="200" text-anchor="middle" fill="#14233F" font-family="-apple-system,Segoe UI,sans-serif" font-weight="700" font-size="15">Builder</text>
+          <text x="743" y="218" text-anchor="middle" fill="#7C879C" font-family="-apple-system,Segoe UI,sans-serif" font-size="11">dev tools · Skills · agents</text>
+          <!-- 6 -->
+          <circle cx="905" cy="145" r="30" fill="#D62839"/><path d="M905 129l2.6 6 6.2 2.6-6.2 2.6L905 152l-2.6-6-6.2-2.6 6.2-2.6z" fill="#fff"/>
+          <text x="905" y="92" text-anchor="middle" fill="#A11321" font-family="-apple-system,Segoe UI,sans-serif" font-weight="700" font-size="15">AI-Enabled Pro</text>
+          <text x="905" y="110" text-anchor="middle" fill="#7C879C" font-family="-apple-system,Segoe UI,sans-serif" font-size="11">leads · automates · mentors</text>
+        </g>
+      </svg>
+    </div>
+
+    <h2>What each milestone looks like — and how to reach it</h2>
+    <table class="cmp">
+      <tr><th>Milestone</th><th>You can… · how to get there</th></tr>
+      <tr><td>1 · Curious</td><td>Write your first structured prompts. → <strong>Prompting</strong> tab + Program Weeks 1–2.</td></tr>
+      <tr><td>2 · Fluent</td><td>Get reliable results daily; you have a prompt library. → <strong>Context</strong> + Program Weeks 2–3.</td></tr>
+      <tr><td>3 · Skilled</td><td>Apply AI to Excel, SQL, email, and reports. → Program Weeks 4–7 + the Apply tabs.</td></tr>
+      <tr><td>4 · Power User</td><td>Chain prompts, self-critique, reuse templates. → <strong>Tips &amp; Tricks</strong>.</td></tr>
+      <tr><td>5 · Builder</td><td>Use coding tools and capture workflows as Skills. → <strong>AI Dev Tools</strong> + <strong>Build an Agent</strong>.</td></tr>
+      <tr><td>6 · AI-Enabled Pro</td><td>Automate real work, build agents, and mentor others. → the whole playbook, on repeat.</td></tr>
+    </table>
+
+    <div class="callout tip"><h3>The only rule of the roadmap</h3><p>Climb one rung at a time, on your real work. Most people are level 2–3 within a month of daily practice — and that already changes how much they get done.</p></div>
+    <div class="toc-pill"><button data-go="program">Start the 8-Week Program →</button><button data-go="plan">How to learn →</button></div>
+  </section>
+
+  <!-- PLAN & APPROACH -->
+  <section class="panel" id="plan" role="tabpanel">
+    <p class="eyebrow red">How to Learn</p>
+    <h1>A plan and approach to learn AI — properly</h1>
+    <p class="lead">Getting good at AI isn't a course you finish; it's a habit you build. Learn on your real work, in small daily reps, and share what works.</p>
+    <div class="callout big tip"><h3>The approach in one line</h3><p>Learn by doing on your real tasks, a little every day, and pass on what works.</p></div>
+
+    <h2>The learning loop</h2>
+    <ul class="spine">
+      <li><span class="t">Learn — one thing at a time</span><p>One technique or concept. Don't try to learn everything before using anything.</p></li>
+      <li><span class="t">Apply — on real work, same day</span><p>Use it immediately on an actual task, not a toy example.</p></li>
+      <li><span class="t">Reflect — what worked, what didn't</span><p>Keep the prompts that worked in a notes file.</p></li>
+      <li><span class="t">Share — teach a teammate</span><p>Explaining it cements your understanding and lifts the team.</p></li>
+    </ul>
+
+    <h2>The skill ladder</h2>
+    <div class="ladder">
+      <div class="rung l1"><div class="lv">Level 1</div><h3>Curious</h3><p>Tried it; results hit-or-miss.</p><div class="nx">Next: Prompting + Context.</div></div>
+      <div class="rung l2"><div class="lv">Level 2</div><h3>Fluent</h3><p>Reliable on daily tasks.</p><div class="nx">Next: reusable prompts &amp; chaining.</div></div>
+      <div class="rung l3"><div class="lv">Level 3</div><h3>Power user</h3><p>Templates, self-critique, workflows.</p><div class="nx">Next: capture a workflow as a Skill.</div></div>
+      <div class="rung l4"><div class="lv">Level 4</div><h3>Builder</h3><p>Skills, tools, agents.</p><div class="nx">Next: scale across the team.</div></div>
+    </div>
+
+    <h2>Your weekly cadence</h2>
+    <div class="grid four">
+      <div class="mini"><div class="ic">30</div><h3>30 minutes a day</h3><p>On real work — the floor, not the target.</p></div>
+      <div class="mini"><div class="ic">1</div><h3>One technique a week</h3><p>Use it until it's automatic.</p></div>
+      <div class="mini r"><div class="ic">✕2</div><h3>Never miss twice</h3><p>Skip a day if needed — never two in a row.</p></div>
+      <div class="mini r"><div class="ic">↗</div><h3>Share one thing</h3><p>Post one prompt or win to the team weekly.</p></div>
+    </div>
+
+    <div class="callout tip"><h3>Right-size the model</h3><p>Lighter, faster models are fine for drafts and summaries; save the most capable models for deep reasoning and high-stakes work. Speed matters when you iterate.</p></div>
+
+    <h2>Pitfalls to avoid</h2>
+    <div class="callout warn"><h3>The five that stall people</h3><p>Treating it as a search box (no context) · accepting the first answer without review · trying to learn everything before using anything · pasting sensitive data · hoarding good prompts instead of sharing them.</p></div>
+    <div class="toc-pill"><button data-go="program">Follow the 8-Week Program →</button><button data-go="prompting">Start with Prompting →</button></div>
+  </section>
+
+  <!-- 8-WEEK PROGRAM -->
+  <section class="panel" id="program" role="tabpanel">
+
+    <p class="eyebrow">Structured Curriculum</p>
+    <h1>The 8-week program</h1>
+    <p class="lead">A complete, self-paced ramp from Day 1 to confident professional — every session ends with something you have built, written, or practised. About 2 hours a day, self-paced with weekly manager check-ins. Eight focused weeks: AI &amp; prompting, Excel, communication, and a real project simulation.</p>
+
+    <div class="callout"><h3>How to use it</h3><p>Two hours a day. Each week below has a clear <strong>outcome</strong>, the full reference (prompts to copy, formulas to type, tables to keep), and a <strong>Practice this week</strong> list. Do the work on your real tasks, and score yourself against the rubric at the foot of this page.</p></div>
+
+    <div class="stepper">
+      <div class="step" data-go="wk1"><div class="wn" style="background:#9db6ea">1</div><div class="wf">AI &amp; Prompt Basics</div></div>
+      <div class="step" data-go="wk2"><div class="wn" style="background:#6f95e4">2</div><div class="wf">Techniques &amp; Iteration</div></div>
+      <div class="step" data-go="wk3"><div class="wn" style="background:#2B5BD7">3</div><div class="wf">Tools &amp; Prompt Library</div></div>
+      <div class="step" data-go="wk4"><div class="wn" style="background:#4538bf">4</div><div class="wf">Excel Essentials</div></div>
+      <div class="step" data-go="wk5"><div class="wn" style="background:#7A3FC0">5</div><div class="wf">Excel Power Skills</div></div>
+      <div class="step" data-go="wk6"><div class="wn" style="background:#9c3aa8">6</div><div class="wf">Email &amp; Comms</div></div>
+      <div class="step" data-go="wk7"><div class="wn" style="background:#c23170">7</div><div class="wf">Meetings &amp; MoM</div></div>
+      <div class="step" data-go="wk8"><div class="wn" style="background:#D62839">8</div><div class="wf">Productivity &amp; Project</div></div>
+    </div>
+
+    <table class="cmp">
+      <tr><th>Week</th><th>Key topics</th><th>Outcome</th></tr>
+      <tr><td>1</td><td>What AI is, tools overview, prompt anatomy</td><td>Write effective prompts for any task</td></tr>
+      <tr><td>2</td><td>Zero/few/chain-of-thought, templates, iteration</td><td>Refine to a perfect output</td></tr>
+      <tr><td>3</td><td>Trackers, email prompts, model choice, 25-prompt library</td><td>Automate ~50% of repetitive work</td></tr>
+      <tr><td>4</td><td>Interface, sort/filter, formulas, cleanup, VLOOKUP</td><td>Build &amp; clean a spreadsheet</td></tr>
+      <tr><td>5</td><td>INDEX-MATCH, COUNTIFS/SUMIFS, pivots, dashboards, shortcuts</td><td>Present a dashboard</td></tr>
+      <tr><td>6</td><td>Email etiquette, subject lines, reply rules, calendar</td><td>Write emails colleagues respect</td></tr>
+      <tr><td>7</td><td>Teams etiquette &amp; shortcuts, Minutes of Meeting</td><td>Run meetings &amp; document decisions</td></tr>
+      <tr><td>8</td><td>Day planning, prioritisation, updates, time tracking, project</td><td>Complete &amp; present a project</td></tr>
+    </table>
+    <p style="margin-top:18px">Pick a week from the sidebar (or tap a step above). Jump in:</p>
+    <div class="toc-pill"><button data-go="wk1">Week 1</button> <button data-go="wk2">Week 2</button> <button data-go="wk3">Week 3</button> <button data-go="wk4">Week 4</button> <button data-go="wk5">Week 5</button> <button data-go="wk6">Week 6</button> <button data-go="wk7">Week 7</button> <button data-go="wk8">Week 8</button> <button data-go="wkrubric">Rubric</button></div>
+  </section>
+
+  <!-- WEEK 1 PANEL -->
+  <section class="panel" id="wk1" role="tabpanel">
+    <p class="eyebrow">Week 1 of 8 · Foundations</p>
+    <h1>AI Foundations &amp; Prompting Basics</h1>
+    <p class="lead">Outcome — write effective prompts for any task.</p>
+
+        <div class="topics"><span>What AI is &amp; its limits</span><span>AI tools overview</span><span>5-element prompt</span><span>Weak vs strong</span></div>
+        <p>Week 1 answers the question every new joiner has: <em>how do I actually use AI at work?</em> Language models predict the most likely next words from your input — they don't "know" facts the way people do. Always verify anything important; they can <strong>hallucinate</strong> (state wrong things confidently), and you must never paste confidential or personal data.</p>
+        <div class="grid two">
+          <div class="mini"><h3>AI excels at</h3><p>Drafting text · summarising · restructuring data into tables · explaining concepts · generating templates.</p></div>
+          <div class="mini r"><h3>AI struggles with</h3><p>Real-time data · precise calculations · confidential data (never paste it) · always being factually correct.</p></div>
+        </div>
+        <h3>The AI tools, at a glance</h3>
+        <table class="cmp">
+          <tr><th>Tool</th><th>Best for · access · free?</th></tr>
+          <tr><td>Claude (Anthropic)</td><td>Nuanced writing, long documents, analysis · claude.ai · yes</td></tr>
+          <tr><td>ChatGPT (OpenAI)</td><td>General tasks, coding, brainstorming · chat.openai.com · yes</td></tr>
+          <tr><td>Gemini (Google)</td><td>Google Workspace, research · gemini.google.com · yes</td></tr>
+          <tr><td>Copilot (Microsoft)</td><td>Excel/Word/Outlook integration · built into M365 · with licence</td></tr>
+          <tr><td>Perplexity</td><td>Research with cited sources · perplexity.ai · yes</td></tr>
+        </table>
+        <h3>The 5-element prompt framework</h3>
+        <table class="cmp">
+          <tr><th>Element</th><th>What it is · example</th></tr>
+          <tr><td>1 · Role</td><td>Who the AI should be. <em>"You are a professional business writing coach…"</em></td></tr>
+          <tr><td>2 · Task</td><td>Exactly what to do. <em>"…review the following email and rewrite it…"</em></td></tr>
+          <tr><td>3 · Context</td><td>Background, data, audience. <em>"…it's going to my manager about a project delay…"</em></td></tr>
+          <tr><td>4 · Format</td><td>The output shape. <em>"…Subject line, 3-paragraph email, a call to action."</em></td></tr>
+          <tr><td>5 · Constraints</td><td>Limits &amp; tone. <em>"…under 150 words; professional but warm."</em></td></tr>
+        </table>
+        <div class="recipe">
+          <div class="pane-dark"><div class="pt">❌ Weak prompt</div>Write me an email</div>
+          <div class="pane-soft"><div class="pt">✅ Strong prompt</div><p>You are a professional business writer. Write a concise follow-up to my manager, Priya, about a delayed task (monthly report, due yesterday, ready by EOD today). Tone: professional, brief apology. Format: subject line + 3 short paragraphs. Under 100 words.</p></div>
+        </div>
+        <div class="callout"><h3>✎ Practice this week</h3><p>Run the same prompt in Claude and ChatGPT; compare tone and length; ask each "What are 5 things you cannot do?" · Then write 5 prompts with the framework: (1) summarise a long email thread into 3 bullets, (2) a weekly task-list template, (3) explain a new concept as if to a beginner, (4) a polite "I need more time" message, (5) 5 subject-line options for a project update.</p></div>
+        <div class="callout tip"><h3>Key takeaway</h3><p>AI is a tool, not a replacement for your thinking. The person who directs AI well outperforms anyone who ignores it or blindly trusts it. Your job: become the expert at giving AI excellent instructions.</p></div>
+    <div class="toc-pill"><button data-go="program">← Program overview</button> <button data-go="wk2">Week 2 →</button></div>
+  </section>
+
+  <!-- WEEK 2 PANEL -->
+  <section class="panel" id="wk2" role="tabpanel">
+    <p class="eyebrow">Week 2 of 8 · Foundations</p>
+    <h1>Prompting Techniques &amp; Iteration</h1>
+    <p class="lead">Outcome — choose the right technique and refine to a perfect output.</p>
+
+        <div class="topics"><span>Zero / Few / Chain-of-thought</span><span>Summary · template · improve prompts</span><span>Iteration mindset</span><span>Common mistakes</span></div>
+        <p>Three core techniques cover almost everything — and the real skill is <strong>iteration</strong>: your first output is a draft, not the final answer. The best users refine 2–4 times.</p>
+        <table class="cmp">
+          <tr><th>Technique</th><th>How it works · best for · example</th></tr>
+          <tr><td>Zero-shot</td><td>Ask directly, no examples. Simple, well-defined tasks. <em>"Summarise this paragraph in 2 sentences."</em></td></tr>
+          <tr><td>Few-shot</td><td>Give 2–3 examples first. Matching a format/tone/style. <em>"Here are 2 emails I like — write a 3rd in the same style."</em></td></tr>
+          <tr><td>Chain-of-thought</td><td>Ask it to reason step by step. Complex decisions, multi-step analysis. <em>"Think step by step: which option should I prioritise and why?"</em></td></tr>
+        </table>
+        <h3>Three prompt templates you'll use daily</h3>
+        <div class="card"><span class="label prompt">Summary</span><pre><code>You are a professional summariser. Summarise the following
+[email / report / notes] into [3 bullets / 1 paragraph / 5 actions].
+Audience: [manager / team]. Tone: concise, professional.
+Text: [paste]</code></pre></div>
+        <div class="card"><span class="label prompt">Template generator</span><pre><code>You are a workplace productivity expert. Create a [template type]
+for [purpose]. Include sections for: [list]. Format: clean, ready to
+use, with headers and bullets. Audience: [who will use it].</code></pre></div>
+        <div class="card"><span class="label prompt">Document improvement</span><pre><code>You are a professional editor. Improve the following [email / report]
+for clarity, professionalism, conciseness, and correct tone. After
+improving it, list the top 3 changes you made and why.
+Original: [paste your draft]</code></pre></div>
+        <h3>Common prompt mistakes &amp; the fix</h3>
+        <table class="cmp">
+          <tr><th>Mistake</th><th>Why · the fix</th></tr>
+          <tr><td>Too vague</td><td>No context/format — add role, context, format, constraints.</td></tr>
+          <tr><td>Wrong tone</td><td>Tone not set — add "Tone: professional / casual / empathetic."</td></tr>
+          <tr><td>Output too long</td><td>No length limit — add "Under 100 words" or "3 bullets max."</td></tr>
+          <tr><td>Wrong format</td><td>Format not set — add "Format as a table / numbered list / email."</td></tr>
+          <tr><td>Made-up facts</td><td>No source data — paste your actual data; never ask it to recall specifics.</td></tr>
+          <tr><td>Ignored a rule</td><td>Too many competing instructions — simplify; one clear task per section.</td></tr>
+          <tr><td>Not actionable</td><td>Task too broad — break into smaller sub-tasks, one prompt each.</td></tr>
+        </table>
+        <div class="callout tip"><h3>The iteration chain</h3><p>Run → read → identify what's off (tone? length? format?) → in the same chat say <em>"That was good, but please [specific fix]"</em> → repeat until perfect → save the prompt that worked. That's how your library is born.</p></div>
+        <div class="callout"><h3>✎ Practice this week</h3><p>Zero-shot: a one-line out-of-office message · Few-shot: paste 2 subject lines you like, ask for 5 more in that style · Chain-of-thought: describe 3 tasks, ask which order to do them and why · Then take any draft through the Document-Improvement prompt and share v1 vs v3.</p></div>
+    <div class="toc-pill"><button data-go="wk1">← Week 1</button> <button data-go="wk3">Week 3 →</button></div>
+  </section>
+
+  <!-- WEEK 3 PANEL -->
+  <section class="panel" id="wk3" role="tabpanel">
+    <p class="eyebrow">Week 3 of 8 · Apply with AI</p>
+    <h1>AI Tools in Practice &amp; Your Prompt Library</h1>
+    <p class="lead">Outcome — automate ~50% of repetitive work.</p>
+
+        <div class="topics"><span>AI-built trackers</span><span>10 email templates</span><span>Model comparison</span><span>25-prompt library</span><span>Cheat sheet</span></div>
+        <p>Turn AI from something you experiment with into a tool you rely on daily. Describe what you need in plain English; get a ready-to-use structure back.</p>
+        <h3>The AI tracker-design workflow</h3>
+        <ul class="clean">
+          <li>Describe the tracker's purpose in 1–2 sentences.</li>
+          <li>List all the columns / fields you need.</li>
+          <li>Specify who uses it, how often it's updated, and what calculations are needed.</li>
+          <li>Ask AI to also suggest formulas, conditional-formatting rules, and layout tips.</li>
+          <li>Take the output → build in Excel → iterate.</li>
+        </ul>
+        <div class="card"><span class="label prompt">Daily task tracker — run this today</span><pre><code>You are an Excel and productivity expert. Design a Daily Task Tracker
+with columns: Task, Category (Email/Meeting/Report/Admin), Priority
+(High/Med/Low), Est. Time (mins), Status (Not started/In progress/
+Done), Deadline, Actual Time, Notes. Add a summary row: total tasks,
+% complete, total time. Provide formulas, conditional formatting
+(overdue=red, done=green), and a step-by-step setup guide.</code></pre></div>
+        <h3>10 ready-to-use email prompts</h3>
+        <table class="cmp">
+          <tr><th>Email type</th><th>Prompt (fill the blanks, paste into AI)</th></tr>
+          <tr><td>Follow-up</td><td>Polite follow-up to [Name] about [topic]. Last contact [X days ago]. I need [action]. Friendly but clear, under 80 words.</td></tr>
+          <tr><td>Task delay</td><td>Tell my manager [Name] that [task] is delayed by [X days] due to [reason]. Include apology, revised timeline, preventive action. Under 100 words.</td></tr>
+          <tr><td>Request info</td><td>Request [info] from [Name/team]. I need it for [purpose] by [date]. Polite and specific, under 80 words.</td></tr>
+          <tr><td>Meeting request</td><td>Request a 30-min meeting with [Name] on [topic]. Suggest 2 slots, add a 2-point agenda. Concise.</td></tr>
+          <tr><td>Thank you</td><td>Brief thank-you to [Name] for [what they did]; mention how it helped. Warm, 3 sentences max.</td></tr>
+          <tr><td>Status update</td><td>Weekly update to my manager: Completed / In progress / Blockers / Next week. Bullet format.</td></tr>
+          <tr><td>Decline</td><td>Politely decline [meeting/request] from [Name]. Reason: [brief]. Offer an alternative. Under 60 words.</td></tr>
+          <tr><td>Introduction</td><td>Self-intro to [team]. I'm [name], new [role]. Background in 1 sentence, what excites me, an offer to connect. Warm.</td></tr>
+          <tr><td>Escalation</td><td>Escalate [issue] to my manager. Situation / impact / what I've tried / what I need. Factual, under 120 words.</td></tr>
+          <tr><td>Apology</td><td>Apology to [Name] for [what happened]. Acknowledge, explain briefly, state the corrective action. Sincere, under 100 words.</td></tr>
+        </table>
+        <h3>Which AI tool for which task</h3>
+        <table class="cmp">
+          <tr><th>Task</th><th>Best tool · why</th></tr>
+          <tr><td>Long documents &amp; editing</td><td>Claude — follows complex instructions over long context.</td></tr>
+          <tr><td>Fast brainstorming</td><td>ChatGPT — quick, creative, good at lists.</td></tr>
+          <tr><td>Research with sources</td><td>Perplexity — pulls live web sources with citations.</td></tr>
+          <tr><td>Excel formula help</td><td>Copilot or ChatGPT — strong at formula generation.</td></tr>
+          <tr><td>Summarising web pages</td><td>Claude or Perplexity — paste URL/content, get a clean summary.</td></tr>
+          <tr><td>Presentation outlines</td><td>ChatGPT or Claude — both strong on structure and flow.</td></tr>
+          <tr><td>Text → structured table</td><td>Claude — best at converting unstructured text.</td></tr>
+          <tr><td>Day planning &amp; priorities</td><td>Any (Claude preferred) — reasons about priorities step by step.</td></tr>
+        </table>
+        <h3>Your 25-prompt starter library</h3>
+        <table class="cmp">
+          <tr><th>Category</th><th>Prompts (what they do)</th></tr>
+          <tr><td>Writing</td><td>Polish my draft · Email subject lines · Tone adjuster · Shorten this (cut to 50%) · Bullets → prose</td></tr>
+          <tr><td>Summary</td><td>3-bullet summary · Executive summary · Action-item extractor · Key-decisions extractor · TL;DR</td></tr>
+          <tr><td>Planning</td><td>Daily plan builder · Priority ranker · Week planner · Meeting-agenda creator · Project checklist</td></tr>
+          <tr><td>Excel</td><td>Formula explainer · Formula writer · Dashboard layout advisor · Data-cleanup guide · Tracker designer</td></tr>
+          <tr><td>Comms / Research</td><td>Reply drafter · Meeting follow-up · Feedback giver · Concept explainer · Pros &amp; cons</td></tr>
+        </table>
+        <h3>The always-open cheat sheet (situation → prompt starter)</h3>
+        <table class="cmp">
+          <tr><th>When you need to…</th><th>Start with</th></tr>
+          <tr><td>Write anything professional</td><td>"You are a professional business writer. Write a [type] for [audience] about [topic]. Tone: [tone]. Length: [length]."</td></tr>
+          <tr><td>Clean up rough notes</td><td>"Convert these rough notes into a well-structured [email / report / summary]: [notes]."</td></tr>
+          <tr><td>Improve your writing</td><td>"Review and improve this for clarity, professionalism, conciseness. List the top 3 changes: [text]."</td></tr>
+          <tr><td>Understand something new</td><td>"Explain [concept] as if I'm a beginner. Use a simple analogy and 3 key bullets."</td></tr>
+          <tr><td>Make a decision</td><td>"Think step by step: decide between [A] and [B]. My constraints: [list]. Which and why?"</td></tr>
+          <tr><td>Turn data into a table</td><td>"Convert the following into a table with columns: [list]. Data: [paste]."</td></tr>
+          <tr><td>Prioritise tasks</td><td>"Here are today's tasks: [list]. Rank by urgency and importance, explain your reasoning."</td></tr>
+          <tr><td>Get coaching</td><td>"Act as a professional coach. My situation: [describe]. Ask me 3 clarifying questions first."</td></tr>
+        </table>
+        <div class="callout"><h3>✎ Practice this week</h3><p>Build the Daily Task Tracker in Excel from the AI instructions and log your real tasks · Use 5 different library prompts to produce real outputs (email, summary, plan, template, data table) · Run one prompt in two tools and write 3 observations.</p></div>
+    <div class="toc-pill"><button data-go="wk2">← Week 2</button> <button data-go="wk4">Week 4 →</button></div>
+  </section>
+
+  <!-- WEEK 4 PANEL -->
+  <section class="panel" id="wk4" role="tabpanel">
+    <p class="eyebrow">Week 4 of 8 · Excel</p>
+    <h1>Excel Essentials</h1>
+    <p class="lead">Outcome — build &amp; clean a working spreadsheet.</p>
+
+        <div class="topics"><span>Interface</span><span>Sort &amp; filter</span><span>12 formulas</span><span>Data cleanup</span><span>VLOOKUP</span></div>
+        <div class="callout"><h3>Practice dataset</h3><p>Create <code>FresherPractice.xlsx</code>, sheet <code>EmployeeData</code>, columns: EmpID, Name, Department, Role, JoinDate, Salary, TasksDone, Status. Add 20 rows (mix HR/IT/Finance/Operations, dates across 2023–2025, salaries 25k–80k). Use it for all Week 4–5 exercises.</p></div>
+        <h3>Interface — know these first</h3>
+        <table class="cmp">
+          <tr><th>Element</th><th>What it does</th></tr>
+          <tr><td>Name Box</td><td>Top-left; shows the current cell. Type an address to jump there.</td></tr>
+          <tr><td>Formula Bar</td><td>Below the ribbon; shows/edits the selected cell's formula.</td></tr>
+          <tr><td>Sheet Tabs</td><td>Bottom; switch sheets. Right-click to rename, duplicate, colour.</td></tr>
+          <tr><td>Freeze Panes</td><td>View → Freeze Panes; keep the header row visible while scrolling.</td></tr>
+          <tr><td>Ctrl + End</td><td>Jump to the last used cell — find the extent of your data.</td></tr>
+          <tr><td>Ctrl + T</td><td>Convert a range to a Table — adds filters, readable formulas.</td></tr>
+        </table>
+        <h3>Sorting &amp; filtering</h3>
+        <ul class="clean">
+          <li><strong>Sort:</strong> single column (Data → A→Z); multi-level (Data → Sort → Add Level: Department, then Name); by colour. Always select the whole table first — never one column alone, or you misalign data.</li>
+          <li><strong>Filter:</strong> <code>Ctrl + Shift + L</code> toggles dropdowns. Filter by multiple values (Ctrl-click), or Custom (Number Filters → Greater Than → 50000). Data → Clear before a new filter.</li>
+          <li><strong>Pro tip:</strong> press <code>Ctrl + T</code> first — Tables auto-filter, auto-expand, and make formulas read <code>=SUM(EmployeeData[Salary])</code> instead of <code>=SUM(F2:F21)</code>.</li>
+        </ul>
+        <h3>The 12 formulas every professional knows</h3>
+        <pre><code>=SUM(F2:F21)                     <span class="c">total salary spend</span>
+=AVERAGE(G2:G21)                 <span class="c">avg tasks done</span>
+=COUNT(F2:F21)  =COUNTA(B2:B21)  <span class="c">numbers / non-empty</span>
+=MAX(F2:F21)    =MIN(F2:F21)     <span class="c">highest / lowest</span>
+=IF(F2&gt;50000,"Senior","Junior")  <span class="c">conditional flag</span>
+=COUNTIF(C2:C21,"IT")            <span class="c">count IT staff</span>
+=SUMIF(C2:C21,"HR",F2:F21)       <span class="c">total HR salary</span>
+=CONCAT(B2," — ",C2)             <span class="c">"Ravi — Finance"</span>
+=TEXT(E2,"DD-MMM-YYYY")          <span class="c">format a date</span>
+=IFERROR(VLOOKUP(...),"Not Found")  <span class="c">friendly errors</span></code></pre>
+        <h3>Data cleanup — spot it, fix it</h3>
+        <table class="cmp">
+          <tr><th>Problem</th><th>Fix</th></tr>
+          <tr><td>Extra spaces</td><td><code>=TRIM(A2)</code> — removes leading/trailing/double spaces.</td></tr>
+          <tr><td>Inconsistent case</td><td><code>=PROPER(A2)</code> for names; <code>UPPER</code>/<code>LOWER</code> for codes.</td></tr>
+          <tr><td>Numbers stored as text</td><td>Data → Text to Columns → Finish.</td></tr>
+          <tr><td>Blank rows in the middle</td><td>Ctrl+G → Special → Blanks → right-click → Delete Row.</td></tr>
+          <tr><td>Duplicate entries</td><td>Data → Remove Duplicates → choose columns.</td></tr>
+          <tr><td>Dates stored as text</td><td>Text to Columns (date format) or <code>DATEVALUE()</code>.</td></tr>
+          <tr><td>Mixed data in one column</td><td>Text to Columns by delimiter, e.g. split "Ravi (IT)".</td></tr>
+          <tr><td>Pattern extraction</td><td>Flash Fill — type one example, then <code>Ctrl + E</code>.</td></tr>
+        </table>
+        <h3>VLOOKUP — pull data across sheets</h3>
+        <pre><code>=VLOOKUP(lookup_value, table_array, col_index_num, FALSE)
+<span class="c">-- FALSE = exact match (use this almost always)</span>
+=VLOOKUP(A2, MasterSheet!A:D, 3, FALSE)
+<span class="c">-- find A2 in cols A–D, return column 3, exact match</span></code></pre>
+        <table class="cmp">
+          <tr><th>Error</th><th>Cause · fix</th></tr>
+          <tr><td>#N/A</td><td>Value not found — check spaces; wrap in <code>IFERROR</code>.</td></tr>
+          <tr><td>#REF!</td><td>col_index bigger than the table — reduce it.</td></tr>
+          <tr><td>Wrong result</td><td>Used TRUE — switch to FALSE for exact match.</td></tr>
+          <tr><td>Not updating</td><td>Lookup column isn't first — move it to position 1, or use INDEX-MATCH.</td></tr>
+        </table>
+        <div class="callout"><h3>✎ Practice this week</h3><p>Sort by Department then Salary; filter to Active IT; custom-filter salary 40k–70k · Compute total/avg/max/min; add a "Level" column with IF; count per department with COUNTIF; total IT pay with SUMIF · Add messy data on purpose and clean it with TRIM, PROPER, Remove Duplicates, Flash Fill · Build a VLOOKUP to a SalaryBands sheet, break it, fix with IFERROR.</p></div>
+    <div class="toc-pill"><button data-go="wk3">← Week 3</button> <button data-go="wk5">Week 5 →</button></div>
+  </section>
+
+  <!-- WEEK 5 PANEL -->
+  <section class="panel" id="wk5" role="tabpanel">
+    <p class="eyebrow">Week 5 of 8 · Excel</p>
+    <h1>Excel Power Skills</h1>
+    <p class="lead">Outcome — present a dashboard to your manager.</p>
+
+        <div class="topics"><span>INDEX-MATCH</span><span>COUNTIFS / SUMIFS</span><span>Pivot tables</span><span>Conditional formatting</span><span>Task tracker · dashboard</span><span>40 shortcuts</span></div>
+        <h3>VLOOKUP → INDEX-MATCH (the upgrade)</h3>
+        <table class="cmp">
+          <tr><th>Feature</th><th>VLOOKUP → INDEX-MATCH</th></tr>
+          <tr><td>Direction</td><td>Left-to-right only → any direction.</td></tr>
+          <tr><td>Column inserts</td><td>Breaks → never breaks.</td></tr>
+          <tr><td>Speed on big data</td><td>Slower → significantly faster.</td></tr>
+          <tr><td>Readability</td><td>Cryptic col number → explicit columns.</td></tr>
+          <tr><td>Multiple criteria</td><td>Difficult → straightforward.</td></tr>
+        </table>
+        <pre><code>=INDEX(return_column, MATCH(lookup_value, lookup_column, 0))
+=INDEX(MasterSheet!D:D, MATCH(A2, MasterSheet!A:A, 0))
+<span class="c">-- find the row where A2 is in col A, return col D of that row</span></code></pre>
+        <h3>COUNTIFS &amp; SUMIFS — multi-condition</h3>
+        <pre><code>=COUNTIFS(C:C,"IT", H:H,"Active")            <span class="c">active IT staff</span>
+=SUMIFS(F:F, C:C,"Finance", H:H,"Active")    <span class="c">active Finance pay</span>
+<span class="c">-- SUMIFS: the sum_range comes FIRST</span></code></pre>
+        <h3>Pivot tables — summarise thousands of rows in seconds</h3>
+        <ul class="clean">
+          <li>Click your data → Insert → PivotTable → New worksheet.</li>
+          <li>ROWS = Department, COLUMNS = Status, VALUES = EmpID (Count) → instant cross-tab.</li>
+          <li>Right-click → Add Slicer → Role to filter interactively. Right-click → Refresh after data changes.</li>
+        </ul>
+        <h3>Conditional formatting</h3>
+        <table class="cmp">
+          <tr><th>Rule</th><th>Shows</th></tr>
+          <tr><td>Highlight duplicates</td><td>Repeated entries that shouldn't exist.</td></tr>
+          <tr><td>Colour scales</td><td>Low→red, high→green heatmap on a number column.</td></tr>
+          <tr><td>Data bars</td><td>In-cell bars — visual comparison without a chart.</td></tr>
+          <tr><td>Icon sets</td><td>Traffic-light ratings by threshold.</td></tr>
+          <tr><td>Above average</td><td>Spots top performers / outliers instantly.</td></tr>
+          <tr><td>Custom formula</td><td><code>=$H2="Resigned"</code> → highlight the whole row.</td></tr>
+        </table>
+        <h3>Build it with AI</h3>
+        <div class="card"><span class="label prompt">Design my task tracker (full build)</span><pre><code>You are a productivity and Excel expert. Design a weekly task tracker
+with 2 sheets: (1) Task Log — Task ID (auto), Task, Category, Priority,
+Assigned By, Start, Due, Status, % Complete, Time Est, Time Actual,
+Notes; (2) Summary — totals by Status &amp; Priority, % complete, overdue
+count, total time. Give the formulas (auto ID, overdue flag, % complete),
+conditional formatting (overdue=red, done=green, in-progress=yellow),
+and full step-by-step build instructions.</code></pre></div>
+        <div class="card"><span class="label prompt">Design my dashboard</span><pre><code>You are a data-visualisation expert. Design a 1-page Excel dashboard
+for a team manager. Data: my task tracker [list columns]. KPIs:
+total tasks, % complete, overdue count, top category, avg time/task.
+Charts: bar (tasks by status), pie (by category), summary table.
+Give exact layout, chart types, KPI formulas, and a colour scheme.</code></pre></div>
+        <div class="callout"><h3>Dashboard design principles</h3><p>One screen, no scrolling · 3–5 KPIs maximum · charts and numbers together · keep raw data on a separate sheet · pick 3 colours and stick to them.</p></div>
+        <h3>The 40 Excel shortcuts (master reference)</h3>
+        <table class="cmp">
+          <tr><th>Navigate &amp; select</th><th>Edit &amp; format</th></tr>
+          <tr><td>Ctrl+Home — go to A1</td><td>F2 — edit active cell</td></tr>
+          <tr><td>Ctrl+End — last used cell</td><td>F4 — toggle absolute ref ($)</td></tr>
+          <tr><td>Ctrl+Arrow — jump to data edge</td><td>Alt+= — auto-sum</td></tr>
+          <tr><td>Ctrl+Shift+Arrow — select to edge</td><td>Ctrl+D / Ctrl+R — fill down / right</td></tr>
+          <tr><td>Ctrl+Space — select column</td><td>Ctrl+; — insert today's date</td></tr>
+          <tr><td>Shift+Space — select row</td><td>Alt+Enter — new line in a cell</td></tr>
+          <tr><td>Ctrl+Shift+End — select to last cell</td><td>Ctrl+1 — Format Cells dialog</td></tr>
+          <tr><td>F5 — Go To (blanks, formulas…)</td><td>Ctrl+Shift+$ / % — currency / percent</td></tr>
+          <tr><td>Ctrl+Page Up/Down — switch sheets</td><td>Ctrl+` — show all formulas</td></tr>
+          <tr><td>Ctrl+F — find</td><td>Ctrl+H — find &amp; replace</td></tr>
+          <tr><th>Tables, rows &amp; charts</th><th>Workbook &amp; output</th></tr>
+          <tr><td>Ctrl+T — create Table</td><td>Ctrl+Z / Ctrl+Y — undo / redo</td></tr>
+          <tr><td>Ctrl+Shift+L — toggle filters</td><td>Ctrl+S — save</td></tr>
+          <tr><td>Ctrl+Shift++ — insert row/col</td><td>Ctrl+N / Ctrl+W — new / close workbook</td></tr>
+          <tr><td>Ctrl+- — delete row/col</td><td>Shift+F11 — insert new sheet</td></tr>
+          <tr><td>Alt+H+O+I — auto-fit column width</td><td>Ctrl+P — print preview</td></tr>
+          <tr><td>F11 — instant chart</td><td>Alt+F4 — close Excel</td></tr>
+          <tr><td>Ctrl+Shift+F3 — create named range</td><td>Win+Shift+S — screenshot (snip)</td></tr>
+          <tr><td>Ctrl+K — insert hyperlink</td><td>Ctrl+Shift+P — font-size picker</td></tr>
+        </table>
+        <div class="callout tip"><h3>Learn these 10 first</h3><p><code>F2</code> · <code>F4</code> · <code>Ctrl+Arrow</code> · <code>Ctrl+Shift+Arrow</code> · <code>Ctrl+D</code> · <code>Alt+=</code> · <code>Ctrl+Z</code> · <code>Ctrl+S</code> · <code>Ctrl+T</code> · <code>Ctrl+1</code>.</p></div>
+        <div class="callout"><h3>✎ Practice this week</h3><p>Replace your VLOOKUPs with INDEX-MATCH · Build a COUNTIFS 4×3 summary and SUMIFS per active department · Build a pivot of TasksDone by Department with a Status slicer · Apply colour scales, data bars and a custom row-highlight rule · Build the Task Tracker and a 1-page dashboard, then do a "speed test": 5 tasks using only the keyboard.</p></div>
+    <div class="toc-pill"><button data-go="wk4">← Week 4</button> <button data-go="wk6">Week 6 →</button></div>
+  </section>
+
+  <!-- WEEK 6 PANEL -->
+  <section class="panel" id="wk6" role="tabpanel">
+    <p class="eyebrow">Week 6 of 8 · Communication</p>
+    <h1>Professional Communication &amp; Email</h1>
+    <p class="lead">Outcome — write emails colleagues respect.</p>
+
+        <div class="topics"><span>Golden rules</span><span>Subject-line formula</span><span>Reply / Reply-All</span><span>Attachments</span><span>Calendar</span></div>
+        <p>How you write an email tells people a great deal about your professionalism. These habits set you apart from day one.</p>
+        <table class="cmp">
+          <tr><th>Golden rule</th><th>What it means</th></tr>
+          <tr><td>Subject-line clarity</td><td>The subject alone says what it's about and any action needed.</td></tr>
+          <tr><td>One topic per email</td><td>Separate subjects → separate emails; easier to reply and file.</td></tr>
+          <tr><td>State the ask up front</td><td>Busy people read the first 2 lines — put the request there.</td></tr>
+          <tr><td>Reply within 24 hours</td><td>Even just: "Received, will get back to you by [date]."</td></tr>
+          <tr><td>Proofread</td><td>Read aloud once; or ask AI: "Check this email for errors."</td></tr>
+          <tr><td>Disciplined CC</td><td>Does this person need to act, or just be aware?</td></tr>
+          <tr><td>BCC carefully</td><td>Mass announcements only — never for secrecy in a conversation.</td></tr>
+        </table>
+        <div class="card"><span class="label prompt">Subject-line formula</span><pre><code>[Action / Status] + [Topic] + [Timeframe if needed]
+✅ Action Required: Monthly Report Review — Due Fri 28 Feb
+✅ Decision Needed: Vendor Selection for Q2
+✅ Resolved: IT Ticket #4821 — Access Issue Fixed
+Tags: [Action Required] [FYI] [Decision Needed] [Urgent] [Reminder]</code></pre></div>
+        <h3>Reply vs Reply All vs Forward</h3>
+        <table class="cmp">
+          <tr><th>Scenario</th><th>Use</th></tr>
+          <tr><td>Relevant to everyone on the thread</td><td>Reply All</td></tr>
+          <tr><td>Only the sender needs it</td><td>Reply</td></tr>
+          <tr><td>Replying to a mass announcement</td><td>Reply (never Reply All)</td></tr>
+          <tr><td>Adding a new person / sharing context</td><td>Forward</td></tr>
+          <tr><td>Sharing an email chain with someone new</td><td>Forward (don't CC without context)</td></tr>
+          <tr><td>Correcting a mistake sent to the whole team</td><td>Reply All (everyone who saw it should see the fix)</td></tr>
+        </table>
+        <h3>Attachments</h3>
+        <ul class="clean">
+          <li>Mention it in the body: "Please find attached the Q3 report."</li>
+          <li>Name files professionally: <code>Q3_Report_Feb2026_v2.pdf</code> — not "report final FINAL.pdf".</li>
+          <li>Large files (&gt;10MB): share a OneDrive/SharePoint link instead.</li>
+          <li>Check it's actually attached before sending — the #1 email mistake.</li>
+          <li>Never send sensitive data (passwords, personal info) as plain text.</li>
+        </ul>
+        <h3>Calendar invites &amp; scheduling</h3>
+        <ul class="clean">
+          <li>Title specific ("Weekly Team Sync — Operations", not "Meeting"); set Required vs Optional deliberately; state the timezone; add the Teams link / room.</li>
+          <li>Body = agenda (3–5 bullets) + pre-read + expected duration; reminder 15 min before (1 day for important ones).</li>
+          <li>Recurring: always set an end date (never "no end date"); edit a single occurrence for exceptions; cancel well in advance with a reason.</li>
+        </ul>
+        <div class="card"><span class="label prompt">Meeting invite body</span><pre><code>Hi [Name], inviting you to [Meeting] on [Date] at [Time].
+Agenda:
+  1. [Topic 1] — [5 mins]
+  2. [Topic 2] — [10 mins]
+  3. AOB — [5 mins]
+Pre-read: [link]. Please confirm your attendance. Thanks, [You]</code></pre></div>
+        <div class="callout"><h3>✎ Practice this week</h3><p>Rewrite 3 weak subject lines with the formula · Decide Reply / Reply All / Forward for 6 real scenarios · Create a recurring bi-weekly invite with a proper agenda and an end date.</p></div>
+    <div class="toc-pill"><button data-go="wk5">← Week 5</button> <button data-go="wk7">Week 7 →</button></div>
+  </section>
+
+  <!-- WEEK 7 PANEL -->
+  <section class="panel" id="wk7" role="tabpanel">
+    <p class="eyebrow">Week 7 of 8 · Communication</p>
+    <h1>Meetings, Teams &amp; Minutes of Meeting</h1>
+    <p class="lead">Outcome — run meetings &amp; document decisions.</p>
+
+        <div class="topics"><span>Teams etiquette</span><span>Teams shortcuts</span><span>Minutes of Meeting</span><span>10 email scenarios</span></div>
+        <h3>Teams meeting best practices</h3>
+        <table class="cmp">
+          <tr><th>Situation</th><th>Best practice</th></tr>
+          <tr><td>Before joining</td><td>Test audio/video 5 mins early; use headphones; find quiet.</td></tr>
+          <tr><td>Camera</td><td>Keep it on for meetings under 10 people — it builds trust.</td></tr>
+          <tr><td>Microphone</td><td>Mute when not speaking; unmute only to speak.</td></tr>
+          <tr><td>Joining late</td><td>Message the chat: "Joining in 2 mins" so the host knows.</td></tr>
+          <tr><td>Raising a point</td><td>Use Raise Hand (<code>Ctrl+Shift+K</code>) rather than interrupting.</td></tr>
+          <tr><td>Chat</td><td>Use it for links, questions, brief comments — not long debate.</td></tr>
+          <tr><td>Screen sharing</td><td>Announce it; close sensitive tabs first.</td></tr>
+          <tr><td>Background</td><td>Blur or use a virtual background if your space is messy.</td></tr>
+          <tr><td>Recording</td><td>Always tell participants before you start.</td></tr>
+          <tr><td>Leaving early</td><td>"Have to drop for another meeting, thank you!" in chat first.</td></tr>
+        </table>
+        <h3>Essential Teams shortcuts</h3>
+        <table class="cmp">
+          <tr><th>Shortcut</th><th>Action</th></tr>
+          <tr><td>Ctrl + M</td><td>Mute / unmute</td></tr>
+          <tr><td>Ctrl + Shift + O</td><td>Camera on / off</td></tr>
+          <tr><td>Ctrl + Shift + K</td><td>Raise / lower hand</td></tr>
+          <tr><td>Ctrl + E</td><td>Search in Teams</td></tr>
+          <tr><td>Ctrl + N</td><td>Start a new chat</td></tr>
+          <tr><td>Ctrl + / &nbsp;·&nbsp; Ctrl + Shift + M</td><td>See all shortcuts · go to Activity feed</td></tr>
+          <tr><td>Escape &nbsp;·&nbsp; Alt + Shift + C</td><td>Decline a call · go to compose box</td></tr>
+        </table>
+        <h3>Minutes of Meeting — turn talk into owned actions</h3>
+        <table class="cmp">
+          <tr><th>Section</th><th>Include</th></tr>
+          <tr><td>Header</td><td>Meeting name, date, time, location/Teams link.</td></tr>
+          <tr><td>Attendees</td><td>Present and absent-but-invited.</td></tr>
+          <tr><td>Agenda recap</td><td>The items that were discussed.</td></tr>
+          <tr><td>Decisions made</td><td>Each decision, clear and unambiguous (who approved).</td></tr>
+          <tr><td>Action items</td><td>Task + owner + deadline — never a task without both.</td></tr>
+          <tr><td>Next meeting</td><td>Date, time, proposed agenda.</td></tr>
+        </table>
+        <div class="card"><span class="label prompt">Write MoM from my notes</span><pre><code>You are a professional meeting coordinator. Convert these rough notes
+into formatted Minutes of Meeting: Meeting Details, Attendees,
+Decisions Made, Action Items (owner + deadline), Next Steps. Clean,
+ready to email. Notes: [paste your bullet-point notes]</code></pre></div>
+        <div class="callout"><h3>✎ Practice: 10 email scenarios</h3><p>Write (and AI-proofread) emails for: (1) arriving 1 hour late · (2) a 1:1 request with 2 slots · (3) a 2-day delay · (4) needing a doc from another team · (5) introducing yourself · (6) summarising a meeting for someone absent · (7) declining a meeting clash · (8) a thank-you · (9) a 3-day escalation · (10) an end-of-week update. Then write the MoM from a (real or simulated) Teams meeting using the prompt above.</p></div>
+    <div class="toc-pill"><button data-go="wk6">← Week 6</button> <button data-go="wk8">Week 8 →</button></div>
+  </section>
+
+  <!-- WEEK 8 PANEL -->
+  <section class="panel" id="wk8" role="tabpanel">
+    <p class="eyebrow">Week 8 of 8 · Productivity</p>
+    <h1>Productivity, Planning &amp; Project Simulation</h1>
+    <p class="lead">Outcome — complete &amp; present a real project.</p>
+
+        <div class="topics"><span>Day planning</span><span>Priority Matrix</span><span>MoSCoW · saying no</span><span>STAR updates</span><span>Time tracking</span><span>5-day project</span></div>
+        <h3>Plan your day — 3 steps, 10 minutes</h3>
+        <table class="cmp">
+          <tr><th>Step</th><th>What to do</th></tr>
+          <tr><td>Brain dump (3 min)</td><td>Write everything in your head — tasks, follow-ups, worries. Don't filter.</td></tr>
+          <tr><td>Prioritise (5 min)</td><td>Sort with the matrix below; assign time blocks.</td></tr>
+          <tr><td>EOD review (2 min)</td><td>Tick done, move unfinished to tomorrow, note blockers for your manager.</td></tr>
+        </table>
+        <h3>The Priority Matrix</h3>
+        <div class="matrix">
+          <div class="mq do"><div class="qh">Urgent + Important</div><h3>Do first</h3><p>Crises, today's deadlines, manager asks. <em>Report due in 2 hours.</em></p></div>
+          <div class="mq sched"><div class="qh">Not urgent + Important</div><h3>Schedule</h3><p>Planning, learning, deep work. <em>Build your tracker template.</em></p></div>
+          <div class="mq deleg"><div class="qh">Urgent + Not important</div><h3>Delegate / minimise</h3><p>Interruptions, some meetings. <em>A non-essential "quick chat".</em></p></div>
+          <div class="mq elim"><div class="qh">Not urgent + Not important</div><h3>Eliminate</h3><p>Busywork, scrolling. <em>Reorganising your desk again.</em></p></div>
+        </div>
+        <div class="card"><span class="label prompt">Plan my day</span><pre><code>Today's tasks: [list]. Working hours: [X–Y]. Fixed meetings: [list].
+Rank by urgency &amp; importance, build a realistic time-blocked
+schedule, flag what to move to tomorrow, and suggest breaks.
+Format: a table — Time | Task | Duration | Priority.</code></pre></div>
+        <h3>MoSCoW &amp; saying no professionally</h3>
+        <table class="cmp">
+          <tr><th>Priority</th><th>Action</th></tr>
+          <tr><td>Must have</td><td>Critical / hard deadline / blocks others — do first.</td></tr>
+          <tr><td>Should have</td><td>Important but survivable if it slips — do after Musts.</td></tr>
+          <tr><td>Could have</td><td>Nice to have — do if time permits.</td></tr>
+          <tr><td>Won't have (now)</td><td>Not this period — defer or drop.</td></tr>
+        </table>
+        <table class="cmp">
+          <tr><th>When…</th><th>Say instead of "no"</th></tr>
+          <tr><td>Asked while at capacity</td><td>"I currently have [X, Y, Z] on my plate. Could you help me reprioritise, or would next week work?"</td></tr>
+          <tr><td>Low-value meeting</td><td>"Could I get the notes after? I have a deadline clash — happy to contribute async."</td></tr>
+          <tr><td>Out of scope</td><td>"That falls outside what I'm working on — [Name/Team] might be better placed."</td></tr>
+          <tr><td>Unrealistic deadline</td><td>"I can have this by [realistic date]. If Friday is critical, I'd need to deprioritise [other task] — your call."</td></tr>
+        </table>
+        <h3>The weekly STAR update</h3>
+        <div class="card"><span class="label prompt">Status update template</span><pre><code>Subject: Weekly Update — [Name] — Week of [Date]
+✅ Completed:  [task → outcome]
+🔄 In progress: [task — % done, ETA]
+⚠️ Blockers:    [issue — I need [decision] by [date]]
+📅 Next week:   [priority 1, 2, 3]</code></pre></div>
+        <div class="card"><span class="label prompt">Write my status update</span><pre><code>You are a professional communications writer. Write a concise weekly
+status update from me to my manager: Completed / In progress /
+Blockers / Next week (bullets). Professional, confident, proactive.
+My notes: [paste]. Keep it under 200 words.</code></pre></div>
+        <h3>Time tracking</h3>
+        <table class="cmp">
+          <tr><th>Column</th><th>Note</th></tr>
+          <tr><td>Date · Task · Category</td><td>Category as a Data-Validation dropdown (Email/Meeting/Report/Admin/Learning).</td></tr>
+          <tr><td>Start · End</td><td><code>Ctrl+Shift+;</code> stamps the current time.</td></tr>
+          <tr><td>Duration (hrs)</td><td><code>=(End-Start)*24</code> — time difference as decimal hours.</td></tr>
+          <tr><td>Billable? · Weekly total</td><td>Yes/No dropdown · <code>=SUMIFS(Duration, Week, ThisWeek)</code>.</td></tr>
+        </table>
+        <div class="callout tip"><h3>Time-tracking AI prompt</h3><p>"Analyse this time log: where does my time go by category? Meetings vs deep work? What patterns do you see? Suggest 3 efficiencies. Log: [paste]."</p></div>
+        <h3>The 5-day project simulation</h3>
+        <table class="cmp">
+          <tr><th>Day</th><th>Task → deliverable</th></tr>
+          <tr><td>Mon</td><td>Plan the project with AI (scope, tasks, timeline, risks) → project plan.</td></tr>
+          <tr><td>Tue</td><td>Build the Excel task tracker → tracker with tasks logged.</td></tr>
+          <tr><td>Wed</td><td>Send the kick-off email + set a recurring status call.</td></tr>
+          <tr><td>Thu</td><td>Build the progress dashboard (% complete, overdue, time).</td></tr>
+          <tr><td>Fri</td><td>Write MoM from the status call + send the manager update.</td></tr>
+        </table>
+        <h3>Final project — how it's assessed</h3>
+        <table class="cmp">
+          <tr><th>Deliverable</th><th>Assessed on · score</th></tr>
+          <tr><td>Project plan</td><td>Clarity, completeness, AI-prompt quality · /20</td></tr>
+          <tr><td>Excel task tracker</td><td>Formulas, conditional formatting, usability · /20</td></tr>
+          <tr><td>Project dashboard</td><td>Layout, KPI accuracy, chart quality · /20</td></tr>
+          <tr><td>Emails &amp; MoM</td><td>Professionalism, structure, subject lines · /20</td></tr>
+          <tr><td>Manager presentation</td><td>Communication clarity, insight quality · /20</td></tr>
+        </table>
+    <div class="toc-pill"><button data-go="wk7">← Week 7</button> <button data-go="wkrubric">Rubric & scoring →</button></div>
+  </section>
+
+  <!-- RUBRIC PANEL -->
+  <section class="panel" id="wkrubric" role="tabpanel">
+    <p class="eyebrow">8-Week Program</p>
+    <h1>Manager evaluation rubric</h1>
+<p>Use it at the end of each week and at completion. Score each area 1 (needs support) → 3 (meeting expectations) → 5 (exceeds).</p>
+    <table class="cmp">
+      <tr><th>Skill area</th><th>3 — meeting expectations → 5 — exceeds</th></tr>
+      <tr><td>Prompt engineering</td><td>Writes 5-element prompts, uses all 3 techniques → iterates, built a library, coaches peers.</td></tr>
+      <tr><td>AI tool usage</td><td>Uses AI daily for emails/summaries/templates → finds new use cases, pushes boundaries.</td></tr>
+      <tr><td>Excel — basics</td><td>SUM/IF/COUNTIF/SUMIF confidently → builds formatted, formula-driven sheets independently.</td></tr>
+      <tr><td>Excel — lookups</td><td>VLOOKUP with IFERROR → uses INDEX-MATCH, explains the difference, debugs errors.</td></tr>
+      <tr><td>Excel — dashboards</td><td>Basic dashboard with 3+ KPIs and charts → presents with a clear narrative and insights.</td></tr>
+      <tr><td>Email etiquette</td><td>Clear subjects, correct CC/Reply, professional tone → colleagues cite your emails as the example.</td></tr>
+      <tr><td>Teams meetings</td><td>Participates, writes MoM, follows etiquette → chairs meetings, distributes MoM within the hour.</td></tr>
+      <tr><td>Day planning</td><td>Priority matrix, daily plan, EOD review → plans the week ahead, rarely misses deadlines.</td></tr>
+      <tr><td>Manager updates</td><td>Weekly structured status email → anticipates needs, flags risks early, concise.</td></tr>
+      <tr><td>Project simulation</td><td>Completes all deliverables with minor support → independent, quality output, clear presentation.</td></tr>
+    </table>
+    <div class="callout"><h3>Scoring guide (out of 50)</h3><p>45–50 outstanding — ready for stretch projects · 38–44 proficient — program complete · 28–37 developing — revisit weak weeks with fortnightly coaching · below 28 — extend with a dedicated mentor. The best professionals never stop: keep the prompt library updated, keep practising Excel, keep communicating proactively.</p></div>
+    <div class="toc-pill"><button data-go="wk8">← Week 8</button> <button data-go="program">Program overview →</button></div>
+  </section>
+
+  <!-- PROMPTING -->
+  <section class="panel" id="prompting" role="tabpanel">
+    <p class="eyebrow">Foundation 1 of 2</p>
+    <h1>Prompting</h1>
+    <p class="lead">A prompt is just instructions. The gap between a wasted reply and a great one is rarely the AI — it's how clearly you asked. Master the five-part anatomy and a handful of techniques, and your output quality jumps overnight.</p>
+
+    <h2>The anatomy of a strong prompt — visualised</h2>
+    <p>Each layer you add removes a guess the AI would otherwise make. Stack them and a vague request becomes a precise instruction.</p>
+    <div class="svgwrap">
+      <svg viewBox="0 0 720 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Anatomy of a prompt: role, task, context, format, constraints">
+        <g font-family="-apple-system,Segoe UI,sans-serif">
+          <!-- five layers -->
+          <g>
+            <rect x="30" y="14" width="430" height="50" rx="10" fill="#EAF0FC" stroke="#2B5BD7"/><text x="48" y="35" font-weight="700" font-size="14" fill="#1B3A8C">ROLE</text><text x="48" y="53" font-size="12" fill="#43506A" font-family="ui-monospace,Consolas,monospace">You are a senior data analyst.</text>
+            <rect x="30" y="74" width="430" height="50" rx="10" fill="#EAF0FC" stroke="#2B5BD7"/><text x="48" y="95" font-weight="700" font-size="14" fill="#1B3A8C">TASK</text><text x="48" y="113" font-size="12" fill="#43506A" font-family="ui-monospace,Consolas,monospace">Find our top 5 customers by revenue.</text>
+            <rect x="30" y="134" width="430" height="50" rx="10" fill="#F0EAFB" stroke="#7A3FC0"/><text x="48" y="155" font-weight="700" font-size="14" fill="#5b2a96">CONTEXT</text><text x="48" y="173" font-size="12" fill="#43506A" font-family="ui-monospace,Consolas,monospace">orders(customer_id, amount, order_date)</text>
+            <rect x="30" y="194" width="430" height="50" rx="10" fill="#EAF0FC" stroke="#2B5BD7"/><text x="48" y="215" font-weight="700" font-size="14" fill="#1B3A8C">FORMAT</text><text x="48" y="233" font-size="12" fill="#43506A" font-family="ui-monospace,Consolas,monospace">Return a table: customer_id, revenue.</text>
+            <rect x="30" y="254" width="430" height="50" rx="10" fill="#FCEBED" stroke="#D62839"/><text x="48" y="275" font-weight="700" font-size="14" fill="#A11321">CONSTRAINTS</text><text x="48" y="293" font-size="12" fill="#43506A" font-family="ui-monospace,Consolas,monospace">SQL Server, last 12 months only.</text>
+          </g>
+          <!-- arrow -->
+          <path d="M470 159 h60" stroke="#7C879C" stroke-width="2" marker-end="url(#pah)"/>
+          <defs><marker id="pah" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7C879C"/></marker></defs>
+          <!-- result -->
+          <rect x="540" y="119" width="150" height="80" rx="12" fill="#0E1E3F"/>
+          <text x="615" y="152" text-anchor="middle" fill="#fff" font-weight="700" font-size="14" font-family="Georgia,serif">Precise,</text>
+          <text x="615" y="172" text-anchor="middle" fill="#fff" font-weight="700" font-size="14" font-family="Georgia,serif">runnable</text>
+          <text x="615" y="190" text-anchor="middle" fill="#9bb0d4" font-size="11">output</text>
+        </g>
+      </svg>
+      <p class="cap">More layers = fewer guesses = a result you can use on the first try.</p>
+    </div>
+
+    <h2>Watch a prompt evolve</h2>
+    <p>The same goal, refined in three passes — exactly how a real session feels.</p>
+    <div class="card"><span class="label bad">v1 — vague</span><pre><code>show me top customers</code></pre><p style="margin:6px 0 0;font-size:13.5px;color:var(--muted)">Whose customers? By what? What output? You'll edit heavily.</p></div>
+    <div class="card"><span class="label prompt">v2 — better</span><pre><code>From my orders table, show the top 5 customers by total amount.</code></pre><p style="margin:6px 0 0;font-size:13.5px;color:var(--muted)">Closer — but it still guesses columns, time range, and format.</p></div>
+    <div class="card"><span class="label good">v3 — strong</span><pre><code>You are a senior SQL developer. From <span class="s">orders</span>(customer_id, amount,
+order_date), return the top 5 customers by total amount in the last
+12 months. Output a table: customer_id, total_revenue, order_count.
+SQL Server 2019, set-based.</code></pre></div>
+
+    <h2>Seven techniques, with an example each</h2>
+    <table class="cmp">
+      <tr><th>Technique</th><th>When · example</th></tr>
+      <tr><td>Zero-shot</td><td>Known task. <em>"Write a CTE that ranks rows by date."</em></td></tr>
+      <tr><td>Few-shot</td><td>Match a style. <em>"Here are 2 emails I like — write a 3rd in the same tone for [topic]."</em></td></tr>
+      <tr><td>Chain-of-thought</td><td>Logic/priorities. <em>"Think step by step: which of these 3 tasks should I do first, and why?"</em></td></tr>
+      <tr><td>Self-consistency</td><td>High stakes. <em>"Solve this 3 independent ways, then tell me where they agree."</em></td></tr>
+      <tr><td>Prompt chaining</td><td>Big task. <em>Plan → generate → review, across separate prompts.</em></td></tr>
+      <tr><td>Self-refine</td><td>Polish. <em>"Review your own answer and fix anything weak."</em></td></tr>
+      <tr><td>Ask-what-it-needs</td><td>Unsure. <em>"What context would help you answer accurately? Ask first."</em></td></tr>
+    </table>
+
+    <h3 style="margin-top:30px">Try it</h3>
+    <div class="handson"><div class="handson-head"><span class="level start">Starter</span><span class="ttl">Fix a vague prompt</span></div><div class="handson-body"><p>Rewrite "<code>summarise this sales data</code>" using all five elements. Run both, compare.</p></div></div>
+    <div class="handson"><div class="handson-head"><span class="level adv">Advanced</span><span class="ttl">Chain-of-thought on a real decision</span></div><div class="handson-body"><pre><code>Think step by step. I have 3 tasks today: [A], [B], [C]. My fixed
+meetings are [list]. Rank them by urgency × importance, explain
+the reasoning, then give me a time-blocked plan.</code></pre></div></div>
+    <div class="callout tip"><h3>The 30-second habit</h3><p>Before sending, ask: did I say <em>who, what, with-what,</em> and <em>what-shape?</em> If a column name or the dialect is missing, add it.</p></div>
+  </section>
+
+  <!-- CONTEXT -->
+  <section class="panel" id="context" role="tabpanel">
+    <p class="eyebrow">Foundation 2 of 2</p>
+    <h1>Context Engineering</h1>
+    <p class="lead">Prompting is how you ask. Context engineering is making sure the model has the right textbook, calculator, and notes before it starts thinking. The AI knows general SQL; it doesn't know your schema, data, or rules — unless you give them.</p>
+    <div class="callout big"><h3>Most bad answers are context failures, not model failures</h3><p>When AI gives a wrong answer, the model is usually fine — the problem is the information it was given. A "smarter" model rarely fixes what better context would.</p></div>
+
+    <h2>What fills the context window</h2>
+    <p>The context window is finite — everything you send <em>and</em> the reply share it. Spend it on what makes the answer correct, and leave room for the output.</p>
+    <div class="svgwrap">
+      <svg viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Context window composition">
+        <g font-family="-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700">
+          <rect x="20" y="40" width="150" height="46" fill="#1B3A8C"/><text x="95" y="68" text-anchor="middle" fill="#fff">Instructions</text>
+          <rect x="170" y="40" width="180" height="46" fill="#2B5BD7"/><text x="260" y="68" text-anchor="middle" fill="#fff">Context (your data)</text>
+          <rect x="350" y="40" width="110" height="46" fill="#7A3FC0"/><text x="405" y="68" text-anchor="middle" fill="#fff">Examples</text>
+          <rect x="460" y="40" width="90" height="46" fill="#a3338f"/><text x="505" y="68" text-anchor="middle" fill="#fff">Question</text>
+          <rect x="550" y="40" width="150" height="46" fill="#E5F4EC" stroke="#1F8A52" stroke-dasharray="4 3"/><text x="625" y="64" text-anchor="middle" fill="#176b40">room for</text><text x="625" y="78" text-anchor="middle" fill="#176b40">the answer</text>
+          <text x="20" y="28" fill="#7C879C" font-weight="600">◄ one finite context window ─────────────────────────────►</text>
+          <text x="20" y="112" fill="#7C879C" font-weight="400" font-size="11">Overload the left and you starve the right — the model runs out of room to respond well.</text>
+        </g>
+      </svg>
+    </div>
+
+    <h2>Why placement matters — "lost in the middle"</h2>
+    <p>Models recall information best at the <strong>start</strong> and <strong>end</strong> of a long input, and can miss what's buried in the middle. Put the rule, the target, and the error where they'll be seen.</p>
+    <div class="svgwrap">
+      <svg viewBox="0 0 720 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Recall is high at the start and end, low in the middle">
+        <g font-family="-apple-system,Segoe UI,sans-serif">
+          <line x1="50" y1="150" x2="690" y2="150" stroke="#E4E8F0" stroke-width="1"/>
+          <path d="M60 50 C 200 130, 540 130, 680 50" fill="none" stroke="#D62839" stroke-width="3"/>
+          <g font-size="11" fill="#7C879C" text-anchor="middle">
+            <circle cx="60" cy="50" r="5" fill="#1F8A52"/><text x="60" y="168">start ✓</text>
+            <circle cx="240" cy="108" r="5" fill="#E8951F"/><text x="240" y="168">early</text>
+            <circle cx="370" cy="124" r="5" fill="#D62839"/><text x="370" y="168">middle ✗</text>
+            <circle cx="500" cy="108" r="5" fill="#E8951F"/><text x="500" y="168">late</text>
+            <circle cx="680" cy="50" r="5" fill="#1F8A52"/><text x="680" y="168">end ✓</text>
+          </g>
+          <text x="30" y="40" font-size="11" fill="#7C879C" transform="rotate(-90 30 40)">recall ▲</text>
+        </g>
+      </svg>
+      <p class="cap">Key facts go first and last; the long reference material in between.</p>
+    </div>
+
+    <h2>The principle: simple, concise, precise</h2>
+    <div class="grid three">
+      <div class="mini"><div class="ic">S</div><h3>Simple</h3><p>One problem at a time.</p></div>
+      <div class="mini"><div class="ic">C</div><h3>Concise</h3><p>The relevant table and rows — not the whole database.</p></div>
+      <div class="mini"><div class="ic">P</div><h3>Precise</h3><p>Real names, real types, the exact spec.</p></div>
+    </div>
+
+    <h2>Too much vs just enough</h2>
+    <div class="recipe">
+      <div class="pane-dark"><div class="pt">Overloaded — buries the signal</div>[pastes a 400-line stored procedure] "something's wrong with the totals, can you find it?"</div>
+      <div class="pane-soft"><div class="pt">Just enough — pinpoints it</div><ul><li>The 15 lines that compute the total</li><li>2 sample rows where it's wrong</li><li>"Expected 1,200; got 1,000."</li></ul></div>
+    </div>
+
+    <div class="callout warn"><h3>Anonymise sample rows</h3><p>Change names, IDs, and amounts. The AI only needs the <em>shape</em> — date formats, blanks vs NULLs — never the real data.</p></div>
+  </section>
+
+  <!-- TIPS -->
+  <section class="panel" id="tricks" role="tabpanel">
+    <p class="eyebrow red">Power Moves</p>
+    <h1>Tips &amp; tricks</h1>
+    <p class="lead">Small habits with outsized returns. Sixteen moves, grouped — plus the one chain that beats them all, shown below.</p>
+    <div class="grp-label">Get better answers</div>
+    <div class="tipgrid">
+      <div class="tipc"><div class="tn">1</div><div><h3>Assign a role</h3><p>Shifts vocabulary and rigour instantly.</p></div></div>
+      <div class="tipc"><div class="tn">2</div><div><h3>Demand a format</h3><p>"As a table." "Only the SQL."</p></div></div>
+      <div class="tipc"><div class="tn">3</div><div><h3>Show one example</h3><p>Beats describing the style.</p></div></div>
+      <div class="tipc"><div class="tn">4</div><div><h3>Ask for reasoning</h3><p>"Think step by step."</p></div></div>
+      <div class="tipc"><div class="tn">5</div><div><h3>List assumptions</h3><p>Surfaces what breaks on real rows.</p></div></div>
+      <div class="tipc"><div class="tn">6</div><div><h3>Ask what it needs</h3><p>Let it find the gaps you missed.</p></div></div>
+    </div>
+    <div class="grp-label">Work faster</div>
+    <div class="tipgrid">
+      <div class="tipc"><div class="tn">7</div><div><h3>Iterate, don't restart</h3><p>Reply "now make it NULL-safe."</p></div></div>
+      <div class="tipc"><div class="tn">8</div><div><h3>Chain the work</h3><p>design → generate → review.</p></div></div>
+      <div class="tipc"><div class="tn">9</div><div><h3>Build a prompt library</h3><p>It compounds within weeks.</p></div></div>
+      <div class="tipc"><div class="tn">10</div><div><h3>Paste a screenshot</h3><p>Error screen or diagram, not a transcript.</p></div></div>
+      <div class="tipc"><div class="tn">11</div><div><h3>Rubber-duck it</h3><p>Explaining surfaces the fix.</p></div></div>
+      <div class="tipc"><div class="tn">12</div><div><h3>Right-size the model</h3><p>Light for drafts, heavy for hard reasoning.</p></div></div>
+    </div>
+    <div class="grp-label">Stay accurate &amp; safe</div>
+    <div class="tipgrid">
+      <div class="tipc r"><div class="tn">13</div><div><h3>Make it self-critique</h3><p>"Flag anything risky."</p></div></div>
+      <div class="tipc r"><div class="tn">14</div><div><h3>Cross-check high-stakes</h3><p>Ask a second model; investigate disagreement.</p></div></div>
+      <div class="tipc r"><div class="tn">15</div><div><h3>Verify load-bearing facts</h3><p>It can be confidently wrong.</p></div></div>
+      <div class="tipc r"><div class="tn">16</div><div><h3>Keep secrets out</h3><p>No credentials or real personal data.</p></div></div>
+    </div>
+
+    <h2>The three-prompt chain — visualised</h2>
+    <p>The single highest-leverage habit: don't ask for everything at once. Split into plan → build → review.</p>
+    <div class="svgwrap">
+      <svg viewBox="0 0 720 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three-prompt chain: plan, generate, review">
+        <defs><marker id="cah" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2B5BD7"/></marker></defs>
+        <g font-family="-apple-system,Segoe UI,sans-serif">
+          <rect x="20" y="50" width="190" height="70" rx="13" fill="#EAF0FC" stroke="#2B5BD7"/><text x="115" y="80" text-anchor="middle" font-weight="700" font-size="15" fill="#1B3A8C">1 · Plan</text><text x="115" y="100" text-anchor="middle" font-size="11.5" fill="#43506A">approach + edge cases</text>
+          <rect x="265" y="50" width="190" height="70" rx="13" fill="#F0EAFB" stroke="#7A3FC0"/><text x="360" y="80" text-anchor="middle" font-weight="700" font-size="15" fill="#5b2a96">2 · Generate</text><text x="360" y="100" text-anchor="middle" font-size="11.5" fill="#43506A">build, handling them</text>
+          <rect x="510" y="50" width="190" height="70" rx="13" fill="#FCEBED" stroke="#D62839"/><text x="605" y="80" text-anchor="middle" font-weight="700" font-size="15" fill="#A11321">3 · Review</text><text x="605" y="100" text-anchor="middle" font-size="11.5" fill="#43506A">self-critique like a PR</text>
+          <path d="M212 85 h50" stroke="#2B5BD7" stroke-width="2.5" marker-end="url(#cah)"/>
+          <path d="M457 85 h50" stroke="#2B5BD7" stroke-width="2.5" marker-end="url(#cah)"/>
+          <path d="M605 124 v14 h-490 v-14" fill="none" stroke="#7C879C" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#cah)"/>
+          <text x="360" y="158" text-anchor="middle" font-size="10.5" fill="#7C879C">loop back if the review finds something</text>
+        </g>
+      </svg>
+    </div>
+
+    <h2>Three tricks in action</h2>
+    <div class="card"><span class="label prompt">Ask what it needs</span><pre><code>I want to build a sales report. What context would help you write
+the right query? Ask me your questions first, then wait.</code></pre></div>
+    <div class="card"><span class="label prompt">Self-critique pass</span><pre><code>Now act as a strict reviewer. Find the 3 weakest assumptions in
+your answer and the most likely way it breaks on real data. Fix them.</code></pre></div>
+    <div class="card"><span class="label prompt">Few-shot for style</span><pre><code>Here are two status updates I like: [paste A] [paste B].
+Write this week's update in the same structure and tone: [my notes].</code></pre></div>
+
+    <div class="callout tip"><h3>One trick to rule them all</h3><p>Iterate in the same thread, and ask it to critique itself. Those two close most of the gap to a strong answer.</p></div>
+  </section>
+
+  <!-- MASTER PROMPTS (.md) -->
+  <section class="panel" id="mdprompts" role="tabpanel">
+    <p class="eyebrow red">Build · Foundations</p>
+    <h1>Master prompts in Markdown — write once, build anything</h1>
+    <p class="lead">Power users don't type prompts into a chat box and lose them. They write prompts as Markdown (<code>.md</code>) files: structured, reusable, version-controlled, and token-efficient. It is the single most leveraged habit for building apps and agents.</p>
+
+    <h2>Why Markdown, in one minute</h2>
+    <div class="grid two">
+      <div class="mini"><div class="ic">⚡</div><h3>Fewer, cleaner tokens</h3><p>Markdown carries structure with almost no syntax overhead. The model reads headings, lists, and code fences natively — so your intent lands with less text than verbose prose.</p></div>
+      <div class="mini"><div class="ic">🔁</div><h3>Reusable &amp; versioned</h3><p>A <code>.md</code> file lives in Git: diff it, review it, roll it back, share it. Your prompt becomes a durable asset, not a throwaway message.</p></div>
+      <div class="mini"><div class="ic">🎯</div><h3>More reliable output</h3><p>Clear sections — Goal, Features, Rules — remove ambiguity, so the model or the coding agent follows the spec instead of guessing.</p></div>
+      <div class="mini r"><div class="ic">$</div><h3>Lower cost, bigger headroom</h3><p>Every token is read — and on an API, paid for — and fills a finite context window. Lean Markdown means cheaper calls and more room for real work.</p></div>
+    </div>
+
+    <h2>Tokens — the unit you're optimising</h2>
+    <p>AI reads text as <strong>tokens</strong>, not words — roughly <strong>4 characters ≈ 1 token</strong> (about ¾ of a word). Both your prompt <em>and</em> the reply count toward the context window, so leaner input leaves more room for output and lowers cost. Rich formats like <code>.docx</code> or <code>.pdf</code> carry hidden markup that wastes tokens; plain, structured Markdown spends the budget on content.</p>
+    <div class="callout"><h3>See your tokens live — the tokenizer</h3><p>Paste any text and watch it split into tokens with a running count at <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener">platform.openai.com/tokenizer</a>. Use it to trim a prompt, compare prose vs Markdown, and estimate cost and context use before you send.</p></div>
+
+    <h2>Same intent, a fraction of the tokens</h2>
+    <div class="recipe">
+      <div class="pane-dark"><div class="pt">Verbose prose — token-heavy</div>Hi! I was hoping you might be able to help me out by writing a little script that would go ahead and read in a CSV file for me, and then, if it's not too much trouble, output all of that data as JSON, and please do make sure it handles any errors nicely and doesn't crash...</div>
+      <div class="pane-soft"><div class="pt">Structured .md — lean</div><ul><li><strong>Task:</strong> CSV → JSON converter</li><li><strong>Input:</strong> path to a <code>.csv</code></li><li><strong>Output:</strong> JSON to stdout</li><li><strong>Rules:</strong> handle missing/blank fields; never crash</li></ul></div>
+    </div>
+    <p style="color:var(--muted);font-size:14px;margin-top:-2px">Same instruction, far fewer tokens — and clearer for the model to follow.</p>
+
+    <h2>Token-saving habits</h2>
+    <ul class="clean">
+      <li><strong>Structure over prose</strong> — headings, lists, and tables instead of long paragraphs.</li>
+      <li><strong>Cut the filler</strong> — drop greetings, apologies, and "if it's not too much trouble".</li>
+      <li><strong>State each rule once</strong> — repetition costs tokens and confuses priority.</li>
+      <li><strong>Trim examples</strong> — two sharp examples beat ten mediocre ones.</li>
+      <li><strong>Reference, don't repeat</strong> — point to a section rather than pasting it twice.</li>
+      <li><strong>Drop irrelevant context</strong> — give the minimum that makes the answer correct.</li>
+    </ul>
+
+    <h2>Create a master prompt (.md) to build an app or agent</h2>
+    <p>A <strong>master prompt</strong> is one Markdown file that becomes the single source of truth your AI builds from. Hand it to Claude Code, Codex, or Firebase Studio and it scaffolds the project; to change direction, you edit the file — not re-explain in chat. This is exactly the <code>CLAUDE.md</code> / <code>AGENTS.md</code> pattern those tools already use.</p>
+
+    <div class="card"><span class="label prompt">PROJECT.md — master prompt for an app</span><pre><code><span class="k"># Project:</span> &lt;app name&gt;
+
+<span class="k">## Goal</span>
+One sentence: what this app does and for whom.
+
+<span class="k">## Users</span>
+Who uses it and the top job they need done.
+
+<span class="k">## Core features (MVP)</span>
+- Feature 1 — short outcome
+- Feature 2 — short outcome
+- Feature 3 — short outcome
+
+<span class="k">## Tech &amp; constraints</span>
+- Frontend / Backend / Database: ...
+- Must: ...   Must not: ...
+
+<span class="k">## Data model</span>
+- entity(field:type, field:type)
+
+<span class="k">## Guardrails</span>
+- Validate input; handle errors; never expose secrets.
+
+<span class="k">## Definition of done</span>
+- [ ] Each feature works end to end
+- [ ] Tests pass
+
+<span class="k">## Out of scope (for now)</span>
+- ...</code></pre></div>
+
+    <div class="card"><span class="label prompt">AGENT.md — master prompt for an AI agent</span><pre><code><span class="k"># Agent:</span> &lt;agent name&gt;
+
+<span class="k">## Job</span>
+One sentence: the outcome this agent delivers.
+
+<span class="k">## Tools (start with 2–4)</span>
+- search() — find information
+- query_db() — read-only
+- send_email() — requires approval
+
+<span class="k">## Rules &amp; guardrails</span>
+- Read-only by default; ask before any write.
+- Never act on production without human approval.
+
+<span class="k">## Stop conditions</span>
+- Goal met, OR 8 steps reached, OR a tool errors twice.
+
+<span class="k">## Examples</span>
+- Input: ... → Expected action: ...</code></pre></div>
+
+    <div class="callout tip"><h3>The workflow</h3><p>Write the <code>.md</code> → hand it to your build tool (<a href="#" data-go="tools">AI Dev Tools</a>) → review what it scaffolds → refine by editing the <code>.md</code>. Keep it in Git so every change is tracked, reviewed, and reversible.</p></div>
+    <div class="toc-pill"><button data-go="tools">→ AI Dev Tools</button><button data-go="agent">→ Build an Agent</button></div>
+  </section>
+
+  <!-- AI DEV TOOLS -->
+  <section class="panel" id="tools" role="tabpanel">
+    <p class="eyebrow red">Build With AI</p>
+    <h1>AI coding &amp; build tools</h1>
+    <p class="lead">A new generation of tools where you describe the work in the terminal or a browser and an AI agent reads your code, makes the changes, and runs them — under your review. Here are the four that matter, and how to start each.</p>
+
+    <div class="toolcard">
+      <div class="th"><div class="badge" style="background:linear-gradient(135deg,#C2410C,#E8951F)">CC</div><div><h3>Claude Code <span style="font-weight:400;color:var(--muted);font-size:14px">(the "Claude CLI")</span></h3><div class="sub">Anthropic · terminal + IDE + desktop</div></div></div>
+      <p>Anthropic's agentic coding tool. You run it from the command line (also in your IDE and desktop app); it reads your whole codebase, edits files, runs commands, and connects to tools via MCP. A <code>CLAUDE.md</code> file in your repo sets house rules and guardrails so changes stay consistent. Best for: serious coding, repo-wide refactors, and keeping a working pipeline stable.</p>
+      <pre><code><span class="c"># start in your project folder</span>
+claude
+<span class="c"># then describe the task; review each change before it applies</span></code></pre>
+    </div>
+
+    <div class="toolcard">
+      <div class="th"><div class="badge" style="background:linear-gradient(135deg,#111,#444)">CX</div><div><h3>OpenAI Codex / Codex CLI</h3><div class="sub">OpenAI · terminal + IDE + web</div></div></div>
+      <p>An open-source terminal coding agent (built in Rust) included with ChatGPT plans. One agent across three surfaces — command line, editor extension, and a web workspace — that reads your repo, proposes multi-file changes, and runs commands in a sandbox with an approval workflow. Supports MCP, and can offload long jobs to the cloud. A <code>AGENTS.md</code> file holds project conventions. Best for: terminal-first developers already on ChatGPT.</p>
+      <pre><code>npm install -g @openai/codex      <span class="c"># needs Node 22+</span>
+codex "add tests for the parser module"</code></pre>
+    </div>
+
+    <div class="toolcard">
+      <div class="th"><div class="badge" style="background:linear-gradient(135deg,#F9AB00,#EA4335)">GF</div><div><h3>Gemini + Firebase Studio</h3><div class="sub">Google · cloud app builder</div></div></div>
+      <p>Google's agentic, cloud-based development environment. Describe an app in plain English and the <strong>App Prototyping agent</strong> generates a working full-stack app — frontend, backend, even a database (Firestore) and sign-in (Authentication) — powered by Gemini, then publishes it. Best for: going from idea to a working web app fast, with little code. (Firebase Studio is in Preview; Google's newer paths are <strong>Google AI Studio "build mode"</strong> and the <strong>Antigravity</strong> agentic IDE; <strong>Gemini CLI</strong> is the terminal counterpart.)</p>
+      <pre><code><span class="c"># in Firebase Studio → "Prototype an app with AI"</span>
+"A web app where users upload a food photo and get a recipe,
+ with sign-in and a saved-recipes list."</code></pre>
+    </div>
+
+    <div class="toolcard">
+      <div class="th"><div class="badge" style="background:linear-gradient(135deg,#24292F,#57606A)">CO</div><div><h3>GitHub Copilot</h3><div class="sub">GitHub · inline in your editor</div></div></div>
+      <p>The everyday companion: inline code completions and chat right inside your editor as you type. Less an autonomous agent, more an always-on pair. Best paired with one of the agents above — Copilot for moment-to-moment completions, an agent for whole-task work.</p>
+    </div>
+
+    <h2>Which to reach for</h2>
+    <table class="cmp">
+      <tr><th>Tool</th><th>Runs where · best for</th></tr>
+      <tr><td>Claude Code</td><td>Terminal/IDE · serious coding &amp; repo-wide work, with strong guardrails.</td></tr>
+      <tr><td>Codex CLI</td><td>Terminal/IDE/web · terminal-first devs on ChatGPT; cloud offload.</td></tr>
+      <tr><td>Firebase Studio</td><td>Browser · idea → working full-stack app, low-code.</td></tr>
+      <tr><td>GitHub Copilot</td><td>Editor · inline completions while you type.</td></tr>
+    </table>
+
+    <div class="callout warn"><h3>Same rules apply, with more force</h3><p>These agents can change and run code. Keep them in a sandbox or a git branch, review every diff before approving, and never let them act on production unreviewed. Don't connect proprietary or regulated codebases without checking your org's policy.</p></div>
+  </section>
+
+  <!-- BUILD AN AGENT -->
+  <section class="panel" id="agent" role="tabpanel">
+    <p class="eyebrow red">From User to Builder</p>
+    <h1>How to build an agent</h1>
+    <p class="lead">A chatbot replies. An agent acts — it decides which tools to use, does the steps in order, and knows when to stop. That's how real work gets done. Here's the whole pathway, kept simple.</p>
+
+    <h2>The agent loop</h2>
+    <p>Every agent runs the same cycle until the goal is met or a stop condition fires.</p>
+    <div class="svgwrap center">
+      <svg viewBox="0 0 420 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Agent loop: observe, reason, act, check">
+        <defs><marker id="ah" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L6,3 L0,6 Z" fill="#2B5BD7"/></marker></defs>
+        <!-- arcs clockwise: observe(top)->reason(right)->act(bottom)->check(left)->observe -->
+        <path d="M250,72 A130,130 0 0 1 348,170" fill="none" stroke="#2B5BD7" stroke-width="2.5" marker-end="url(#ah)"/>
+        <path d="M348,190 A130,130 0 0 1 250,288" fill="none" stroke="#2B5BD7" stroke-width="2.5" marker-end="url(#ah)"/>
+        <path d="M170,288 A130,130 0 0 1 72,190" fill="none" stroke="#2B5BD7" stroke-width="2.5" marker-end="url(#ah)"/>
+        <path d="M72,170 A130,130 0 0 1 170,72" fill="none" stroke="#2B5BD7" stroke-width="2.5" marker-end="url(#ah)"/>
+        <!-- center goal -->
+        <circle cx="210" cy="180" r="46" fill="#0E1E3F"/>
+        <text x="210" y="174" text-anchor="middle" fill="#fff" font-family="Georgia,serif" font-weight="700" font-size="16">GOAL</text>
+        <text x="210" y="194" text-anchor="middle" fill="#9bb0d4" font-family="-apple-system,Segoe UI,sans-serif" font-size="9">until done or limit</text>
+        <!-- nodes -->
+        <g font-family="-apple-system,Segoe UI,sans-serif" font-weight="700" font-size="13">
+          <circle cx="210" cy="58" r="40" fill="#EAF0FC" stroke="#2B5BD7" stroke-width="2"/><text x="210" y="63" text-anchor="middle" fill="#1B3A8C">Observe</text>
+          <circle cx="362" cy="180" r="40" fill="#EAF0FC" stroke="#2B5BD7" stroke-width="2"/><text x="362" y="185" text-anchor="middle" fill="#1B3A8C">Reason</text>
+          <circle cx="210" cy="302" r="40" fill="#EAF0FC" stroke="#2B5BD7" stroke-width="2"/><text x="210" y="307" text-anchor="middle" fill="#1B3A8C">Act</text>
+          <circle cx="58" cy="180" r="40" fill="#EAF0FC" stroke="#2B5BD7" stroke-width="2"/><text x="58" y="185" text-anchor="middle" fill="#1B3A8C">Check</text>
+        </g>
+      </svg>
+    </div>
+
+    <h2>Build it in five steps</h2>
+    <ul class="spine">
+      <li><span class="t">Define the job</span><p>One sentence describing the outcome. Start with a single, clear, repetitive task — not "do everything."</p></li>
+      <li><span class="t">Pick your path</span><p><strong>No-code</strong> to start: n8n, Lindy, Flowise, Botpress, CrewAI. <strong>Code</strong> when it gets specific: the Claude Agent SDK + Skills, OpenAI's Agents SDK, or frameworks like LangGraph.</p></li>
+      <li><span class="t">Give it context &amp; tools</span><p>The data, the apps, and the rules. Start with 2–4 tools. Use MCP to connect systems through one standard instead of one-off integrations.</p></li>
+      <li><span class="t">Add guardrails</span><p>Require human approval for risky actions (writes, payments, deletes). Define "done", and set a step limit so it can't loop forever.</p></li>
+      <li><span class="t">Test &amp; refine</span><p>Run realistic examples; watch for scope creep (asking unrelated questions, calling extra tools, continuing past the goal). Tighten the job statement and repeat.</p></li>
+    </ul>
+
+    <h2>Anatomy of an agent</h2>
+    <div class="grid three">
+      <div class="mini"><div class="ic">🧠</div><h3>Model</h3><p>The reasoning engine. Right-size it — smaller models are often enough for tool-driven tasks.</p></div>
+      <div class="mini"><div class="ic">📋</div><h3>Instructions</h3><p>Its job, its rules, and its definition of "done".</p></div>
+      <div class="mini"><div class="ic">🔧</div><h3>Tools</h3><p>How it acts — search, run code, query a DB, call an API. Start with a few.</p></div>
+      <div class="mini p"><div class="ic">💾</div><h3>Memory</h3><p>Optional. Most first agents don't need it — add only when the task truly requires recall.</p></div>
+      <div class="mini r"><div class="ic">🛡</div><h3>Guardrails</h3><p>Approvals, limits, sandboxes. The more autonomy, the tighter these get.</p></div>
+      <div class="mini"><div class="ic">🔁</div><h3>The loop</h3><p>Observe → reason → act → check, until done or stopped.</p></div>
+    </div>
+
+    <div class="callout tip"><h3>Crawl, walk, run</h3><p>Your first job isn't a masterpiece — it's to make one useful thing work. Ship a no-code agent for one task, prove it reliably, then graduate to code and more tools. A single working agent beats five broken prototypes.</p></div>
+    <div class="callout warn"><h3>Keep it simple early</h3><p>Skip persistent memory and retrieval until you genuinely need them — many beginners add complexity that their task doesn't require.</p></div>
+  </section>
+
+  <!-- CLAUDE SKILLS -->
+  <section class="panel" id="skills" role="tabpanel">
+    <p class="eyebrow red">Build · Reusable Expertise</p>
+    <h1>Claude Skills</h1>
+    <p class="lead">A Skill is a folder that teaches Claude to do a specific task <em>your way</em> — packaged once, reused forever, and loaded only when it's relevant. It's how you turn "the way we do this here" into something Claude applies automatically.</p>
+
+    <h2>How a Skill works</h2>
+    <p>Claude keeps only each Skill's <strong>name + description</strong> in view at all times (cheap). When your request matches, it pulls in the full instructions and any files — this "load-on-demand" design (progressive disclosure) means you can install many Skills with no token penalty.</p>
+    <div class="svgwrap">
+      <svg viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="How a Claude Skill loads on demand">
+        <defs><marker id="skah" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7C879C"/></marker></defs>
+        <g font-family="-apple-system,Segoe UI,sans-serif" font-size="11.5" font-weight="700" text-anchor="middle">
+          <rect x="12" y="48" width="120" height="44" rx="10" fill="#EAF0FC" stroke="#2B5BD7"/><text x="72" y="66" fill="#1B3A8C">Your request</text><text x="72" y="82" fill="#43506A" font-weight="400" font-size="10">"review this SQL"</text>
+          <rect x="166" y="48" width="150" height="44" rx="10" fill="#fff" stroke="#E4E8F0"/><text x="241" y="66" fill="#14233F">Claude scans skill</text><text x="241" y="82" fill="#43506A" font-weight="400" font-size="10">names + descriptions</text>
+          <rect x="350" y="48" width="150" height="44" rx="10" fill="#F0EAFB" stroke="#7A3FC0"/><text x="425" y="66" fill="#5b2a96">Match → load</text><text x="425" y="82" fill="#43506A" font-weight="400" font-size="10">SKILL.md + files</text>
+          <rect x="588" y="48" width="120" height="44" rx="10" fill="#E5F4EC" stroke="#1F8A52"/><text x="648" y="73" fill="#176b40">Done your way</text>
+          <path d="M132 70 h30" stroke="#7C879C" stroke-width="2" marker-end="url(#skah)"/>
+          <path d="M316 70 h30" stroke="#7C879C" stroke-width="2" marker-end="url(#skah)"/>
+          <path d="M500 70 h84" stroke="#7C879C" stroke-width="2" marker-end="url(#skah)"/>
+          <text x="241" y="116" fill="#7C879C" font-weight="400" font-size="10">always in context (lightweight)</text>
+          <text x="425" y="116" fill="#7C879C" font-weight="400" font-size="10">loaded only when needed</text>
+        </g>
+      </svg>
+    </div>
+
+    <h2>Why use Skills</h2>
+    <div class="grid four">
+      <div class="mini"><div class="ic">✓</div><h3>Consistent</h3><p>Your rules, formats, and checks applied the same way every time.</p></div>
+      <div class="mini"><div class="ic">⚡</div><h3>On-demand</h3><p>Only loads when the task matches — install many with no token bloat.</p></div>
+      <div class="mini p"><div class="ic">⊕</div><h3>Composable</h3><p>Claude can combine several Skills for one job.</p></div>
+      <div class="mini r"><div class="ic">↗</div><h3>Portable</h3><p>The same Skill works in Claude.ai, Claude Code, and the API.</p></div>
+    </div>
+
+    <h2>Anatomy of a Skill</h2>
+    <p>Every Skill is a folder whose only required file is <code>SKILL.md</code>. Optional sub-folders hold scripts and reference material Claude pulls in when needed.</p>
+    <pre><code>sql-review/
+├── <span class="s">SKILL.md</span>        <span class="c"># required — metadata + instructions</span>
+├── references/     <span class="c"># optional — checklists, examples, style guides</span>
+│   └── checklist.md
+└── scripts/        <span class="c"># optional — helper code Claude can run</span>
+    └── lint.py</code></pre>
+
+    <h2>A worked example — <code>SKILL.md</code></h2>
+    <p>Two parts: YAML frontmatter (the metadata Claude reads to decide <em>when</em> to use it) and a Markdown body (the instructions it follows once triggered).</p>
+    <div class="card"><span class="label prompt">sql-review/SKILL.md</span><pre><code><span class="k">---</span>
+<span class="k">name:</span> sql-review
+<span class="k">description:</span> Reviews SQL for correctness, performance, and safety.
+  Use when the user shares a query or asks for a SQL review.
+<span class="k">---</span>
+
+<span class="k"># SQL Review</span>
+
+When asked to review SQL, check in this order:
+1. Set-based — flag row-by-row cursors and suggest a rewrite.
+2. NULL-safe — NULLIF on division, COALESCE on outer joins.
+3. Schema-valid — every table/column exists in the given schema.
+4. Safety — flag any UPDATE / DELETE / MERGE without a WHERE.
+
+<span class="k">## Output</span>
+A short list: issue · why it matters · the fix.
+
+<span class="k">## Boundaries</span>
+Do NOT rewrite the whole query unless asked — only report issues.
+Never invent column names; if the schema is missing, ask for it.</code></pre></div>
+    <div class="callout"><h3>The description is the trigger</h3><p>Claude decides whether to use a Skill from its <code>description</code> alone. Say <strong>what it does and when to use it</strong> ("Use when…"). Vague descriptions never fire; specific ones do.</p></div>
+
+    <h2>Create one in six steps</h2>
+    <ul class="spine">
+      <li><span class="t">Pick a repeatable task</span><p>Something you explain or redo often — a review checklist, a report format, a house style.</p></li>
+      <li><span class="t">Make the folder + SKILL.md</span><p>Folder name in lowercase-kebab-case (e.g. <code>sql-review</code>); the <code>name</code> field should match it.</p></li>
+      <li><span class="t">Write the frontmatter</span><p><code>name</code> + a specific <code>description</code> — this is what makes the Skill trigger at the right time.</p></li>
+      <li><span class="t">Write the instructions</span><p>Numbered steps, <strong>one concrete example</strong>, and boundaries (what NOT to do). Keep it focused on one job.</p></li>
+      <li><span class="t">Add optional files</span><p>Drop templates into <code>references/</code> or helper code into <code>scripts/</code>.</p></li>
+      <li><span class="t">Install &amp; use it</span><p>See below — then just ask in plain language.</p></li>
+    </ul>
+    <div class="callout tip"><h3>Shortcut: the Skill Creator</h3><p>Anthropic ships a <strong>Skill Creator</strong> built into Claude Desktop and Cowork (in Claude Code: <code>/plugin install skill-creator</code>). Describe the workflow and it generates a complete, well-structured Skill — and tunes the description so it triggers reliably.</p></div>
+
+    <h2>Install &amp; use it — three surfaces</h2>
+    <table class="cmp">
+      <tr><th>Where</th><th>How to add · how to use</th></tr>
+      <tr><td>Claude.ai / Cowork</td><td>Settings → Features → upload your Skill (zip). Needs code execution; Pro / Max / Team / Enterprise. Then just ask normally.</td></tr>
+      <tr><td>Claude Code</td><td>Drop the folder in <code>~/.claude/skills/</code> (personal) or <code>.claude/skills/</code> (project) — filesystem-based, no upload.</td></tr>
+      <tr><td>API</td><td>Upload via the Skills API, or reference pre-built Skills by <code>skill_id</code> (e.g. <code>pptx</code>, <code>xlsx</code>) with the code-execution beta.</td></tr>
+    </table>
+    <div class="recipe">
+      <div class="pane-dark"><div class="pt">You just say</div>Here's a query — can you review it?<br><br>SELECT * FROM orders o JOIN customers c<br>ON o.cust_id = c.id WHERE o.total/o.qty &gt; 100;</div>
+      <div class="pane-soft"><div class="pt">The Skill fires automatically</div><ul><li>Matches <em>sql-review</em>'s description.</li><li>Flags <code>o.total/o.qty</code> → wrap in <code>NULLIF(o.qty,0)</code>.</li><li>Notes <code>SELECT *</code> and confirms the join keys exist.</li><li>Returns issue · why · fix — your format, every time.</li></ul></div>
+    </div>
+
+    <div class="callout warn"><h3>Keep Skills safe</h3><p>Never put secrets (API keys, passwords, connection strings) in Skill files, and be cautious of community Skills that instruct Claude to reach external network sources. Review a Skill before you install it.</p></div>
+    <div class="toc-pill"><button data-go="agent">← Build an Agent</button><button data-go="tools">AI Dev Tools</button><button data-go="learning">Course: Agent Skills →</button></div>
+  </section>
+
+  <!-- AI ADVANCEMENTS -->
+  <section class="panel" id="advances" role="tabpanel">
+    <p class="eyebrow red">The State of Play</p>
+    <h1>What AI can do now</h1>
+    <p class="lead">AI has moved from "a chatbot that answers" to "a workflow partner that acts." Here's what's new, in plain terms.</p>
+    <ul class="spine">
+      <li><span class="t">Agentic AI</span><p>Plans tasks, calls tools, completes multi-step work — not just a snippet to paste.</p></li>
+      <li><span class="t">Multi-agent systems</span><p>Teams of specialised agents replacing single all-purpose ones — the "microservices moment" for AI.</p></li>
+      <li><span class="t">Reasoning</span><p>Thinks step by step before answering; more reliable on multi-step logic.</p></li>
+      <li><span class="t">Skills &amp; connectors (MCP)</span><p>Package "how we do this" once; connect AI to your systems through one standard.</p></li>
+      <li><span class="t">Smaller, cheaper, on-device</span><p>Efficient models match older giants on many tasks at a fraction of the cost.</p></li>
+      <li><span class="t">Multimodal</span><p>Reads screenshots, diagrams, and whole documents, not just text.</p></li>
+    </ul>
+    <h2>Adopt it in the right order</h2>
+    <div class="grid three">
+      <div class="mini"><div class="ic">1</div><h3>Crawl — chat</h3><p>Drafting, debugging, Q&amp;A. Low risk, immediate value.</p></div>
+      <div class="mini"><div class="ic">2</div><h3>Walk — Skills</h3><p>Capture repeated workflows for consistency.</p></div>
+      <div class="mini r"><div class="ic">3</div><h3>Run — agents</h3><p>Let AI act across tools. Highest leverage, tightest review.</p></div>
+    </div>
+    <div class="callout warn"><h3>More capability means more review, not less</h3><p>The more autonomy you grant, the tighter the guardrails: sandboxes, read-only by default, human approval before production writes.</p></div>
+  </section>
+
+  <!-- SQL -->
+  <section class="panel" id="sql" role="tabpanel">
+    <p class="eyebrow">Apply · Daily Work</p>
+    <h1>SQL &amp; Stored Procedures</h1>
+    <p class="lead">Where most data teams spend their day — and where AI saves the most time, writing the first draft and the boilerplate so you focus on correctness and performance.</p>
+
+    <h2>How text-to-SQL actually works</h2>
+    <p>AI doesn't query your database — it writes SQL from your words. The quality hinges on one step: giving it the schema.</p>
+    <div class="svgwrap">
+      <svg viewBox="0 0 720 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Text to SQL pipeline">
+        <defs><marker id="sah" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7C879C"/></marker></defs>
+        <g font-family="-apple-system,Segoe UI,sans-serif" font-size="11.5" font-weight="700" text-anchor="middle">
+          <rect x="14" y="42" width="104" height="40" rx="9" fill="#EAF0FC" stroke="#2B5BD7"/><text x="66" y="60" fill="#1B3A8C">Plain</text><text x="66" y="74" fill="#1B3A8C">English</text>
+          <rect x="150" y="42" width="104" height="40" rx="9" fill="#F0EAFB" stroke="#7A3FC0"/><text x="202" y="60" fill="#5b2a96">+ Schema</text><text x="202" y="74" fill="#5b2a96" font-weight="400" font-size="10">cols &amp; types</text>
+          <rect x="286" y="42" width="104" height="40" rx="9" fill="#0E1E3F"/><text x="338" y="66" fill="#fff">AI drafts</text>
+          <rect x="422" y="42" width="104" height="40" rx="9" fill="#EAF0FC" stroke="#2B5BD7"/><text x="474" y="66" fill="#1B3A8C">SQL</text>
+          <rect x="558" y="42" width="104" height="40" rx="9" fill="#E5F4EC" stroke="#1F8A52"/><text x="610" y="60" fill="#176b40">Validate</text><text x="610" y="74" fill="#176b40" font-weight="400" font-size="10">you review</text>
+          <path d="M118 62 h30" stroke="#7C879C" stroke-width="2" marker-end="url(#sah)"/>
+          <path d="M254 62 h30" stroke="#7C879C" stroke-width="2" marker-end="url(#sah)"/>
+          <path d="M390 62 h30" stroke="#7C879C" stroke-width="2" marker-end="url(#sah)"/>
+          <path d="M526 62 h30" stroke="#7C879C" stroke-width="2" marker-end="url(#sah)"/>
+          <text x="202" y="28" fill="#D62839" font-size="11" font-weight="700">▲ the step people skip</text>
+        </g>
+      </svg>
+    </div>
+    <div class="callout big"><h3>Schema awareness is the #1 factor</h3><p>Give the AI your column lists and it's reliable on standard SELECT / JOIN / GROUP BY. Without them, it invents table and column names that don't exist.</p></div>
+
+    <div class="recipe"><div class="pane-dark"><div class="pt">Ask</div>For <span style="color:#7fb6ff">sales</span>(region, sale_date, product_id, amount): total revenue per region for Q2 2026, plus each region's share of total, highest first. Set-based, SQL Server 2019.</div><div class="pane-soft"><div class="pt">You get</div><p>Aggregation + a window function (<code>SUM() OVER()</code>) — ready to validate. Then refine: "make the quarter a parameter."</p></div></div>
+
+    <h2>Window functions — the concept made visual</h2>
+    <p>The three ranking functions look alike but treat <em>ties</em> differently. Same scores, three different results:</p>
+    <table class="cmp">
+      <tr><th>Score</th><th>ROW_NUMBER()</th><th>RANK()</th><th>DENSE_RANK()</th></tr>
+      <tr><td>500</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td>500 <span style="color:var(--muted)">(tie)</span></td><td>2</td><td>1</td><td>1</td></tr>
+      <tr><td>480</td><td>3</td><td>3 <span style="color:var(--red)">(skips 2)</span></td><td>2 <span style="color:var(--green)">(no gap)</span></td></tr>
+      <tr><td>460</td><td>4</td><td>4</td><td>3</td></tr>
+    </table>
+    <p style="font-size:14px;color:var(--muted);margin-top:-2px"><strong>ROW_NUMBER</strong> = always unique · <strong>RANK</strong> = ties share, then a gap · <strong>DENSE_RANK</strong> = ties share, no gap. Like Olympic medals: two golds, no silver.</p>
+
+    <h2>Four worked patterns you'll reuse</h2>
+    <pre><code><span class="c">-- 1 · Running total (cumulative revenue by month)</span>
+SUM(amount) OVER (ORDER BY month
+                  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+
+<span class="c">-- 2 · Month-over-month change with LAG()</span>
+amount - LAG(amount) OVER (ORDER BY month)   <span class="c">-- prior row</span>
+
+<span class="c">-- 3 · Top N per group (top product in each region)</span>
+SELECT * FROM (
+  SELECT region, product, sales,
+         RANK() OVER (PARTITION BY region ORDER BY sales DESC) rnk
+  FROM totals
+) t WHERE rnk = 1;
+
+<span class="c">-- 4 · Keep detail AND the group total side by side</span>
+amount, SUM(amount) OVER (PARTITION BY region) AS region_total</code></pre>
+
+    <h2>More asks that work</h2>
+    <pre><code>Customers who purchased in the last 30 days but NOT the prior 6 months.
+Total sales by product category for Q1, sorted by revenue desc.
+The 2nd-highest salary per department (window function, not TOP).
+A pivot: months across columns, product categories down rows.</code></pre>
+
+    <div class="handson"><div class="handson-head"><span class="level adv">Advanced</span><span class="ttl">Refactor for performance</span></div><div class="handson-body"><pre><code>This is slow on ~5M rows. Here it is, with row counts. Suggest a
+faster set-based rewrite, the indexes that help, and the trade-offs.</code></pre></div></div>
+    <div class="callout warn"><h3>Two non-negotiables</h3><p>Read it before you run it; never let AI-written <code>UPDATE</code>/<code>DELETE</code>/<code>MERGE</code> touch production unreviewed.</p></div>
+  </section>
+
+  <!-- RECON -->
+  <section class="panel" id="recon" role="tabpanel">
+    <p class="eyebrow red">Apply · For QA</p>
+    <h1>Reconciliation Testing</h1>
+    <p class="lead">Compare source to target, prove the numbers tie out, prove nothing was lost or duplicated. After every ETL load you ask one question — <em>can I trust this data?</em> — and answer it with a handful of checks.</p>
+
+    <h2>The reconciliation flow</h2>
+    <div class="svgwrap">
+      <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Source to target reconciliation flow">
+        <defs><marker id="rah" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7C879C"/></marker></defs>
+        <g font-family="-apple-system,Segoe UI,sans-serif">
+          <rect x="20" y="78" width="120" height="48" rx="11" fill="#EAF0FC" stroke="#2B5BD7"/><text x="80" y="100" text-anchor="middle" font-weight="700" font-size="13" fill="#1B3A8C">SOURCE</text><text x="80" y="116" text-anchor="middle" font-size="10.5" fill="#43506A">system of record</text>
+          <rect x="580" y="78" width="120" height="48" rx="11" fill="#F0EAFB" stroke="#7A3FC0"/><text x="640" y="100" text-anchor="middle" font-weight="700" font-size="13" fill="#5b2a96">TARGET</text><text x="640" y="116" text-anchor="middle" font-size="10.5" fill="#43506A">warehouse</text>
+          <!-- checks in middle -->
+          <g font-size="10.5" font-weight="700" text-anchor="middle">
+            <rect x="190" y="26" width="150" height="34" rx="8" fill="#fff" stroke="#E4E8F0"/><text x="265" y="47" fill="#14233F">① Row counts match?</text>
+            <rect x="190" y="68" width="150" height="34" rx="8" fill="#fff" stroke="#E4E8F0"/><text x="265" y="89" fill="#14233F">② Sums / totals match?</text>
+            <rect x="190" y="110" width="150" height="34" rx="8" fill="#fff" stroke="#E4E8F0"/><text x="265" y="131" fill="#14233F">③ EXCEPT: missing keys?</text>
+            <rect x="365" y="47" width="150" height="34" rx="8" fill="#fff" stroke="#E4E8F0"/><text x="440" y="68" fill="#14233F">④ Duplicates?</text>
+            <rect x="365" y="89" width="150" height="34" rx="8" fill="#fff" stroke="#E4E8F0"/><text x="440" y="110" fill="#14233F">⑤ Field-level diff?</text>
+          </g>
+          <path d="M140 102 h45" stroke="#7C879C" stroke-width="1.5" marker-end="url(#rah)"/>
+          <path d="M515 102 h60" stroke="#7C879C" stroke-width="1.5" marker-end="url(#rah)"/>
+          <!-- gate -->
+          <text x="360" y="178" text-anchor="middle" font-size="12" font-weight="700" fill="#14233F">All pass → <tspan fill="#176b40">✓ TRUST</tspan>  ·  any fail → <tspan fill="#A11321">✗ INVESTIGATE</tspan></text>
+        </g>
+      </svg>
+    </div>
+
+    <h2>The five checks, as SQL</h2>
+    <pre><code><span class="c">-- 1 · Row count (completeness)</span>
+SELECT (SELECT COUNT(*) FROM source) AS src,
+       (SELECT COUNT(*) FROM target) AS tgt;
+
+<span class="c">-- 2 · Amount totals (consistency)</span>
+SELECT SUM(amount) FROM source;      <span class="c">-- must equal target's</span>
+
+<span class="c">-- 3 · Missing / extra keys (EXCEPT both ways)</span>
+SELECT id FROM source EXCEPT SELECT id FROM target;  <span class="c">-- missing</span>
+SELECT id FROM target EXCEPT SELECT id FROM source;  <span class="c">-- extra</span>
+
+<span class="c">-- 4 · Duplicate keys within the load (uniqueness)</span>
+SELECT id, COUNT(*) FROM target GROUP BY id HAVING COUNT(*) &gt; 1;
+
+<span class="c">-- 5 · Field-level mismatch (FULL OUTER JOIN)</span>
+SELECT s.id, s.amount AS src_amt, t.amount AS tgt_amt
+FROM source s FULL OUTER JOIN target t ON s.id = t.id
+WHERE s.amount &lt;&gt; t.amount OR s.id IS NULL OR t.id IS NULL;</code></pre>
+
+    <h2>What a result sheet looks like</h2>
+    <table class="cmp">
+      <tr><th>Check</th><th>Source</th><th>Target</th><th>Result</th></tr>
+      <tr><td>Row count</td><td>10,000</td><td>10,000</td><td><span class="chip pass">PASS</span></td></tr>
+      <tr><td>Sum of amount</td><td>4,812,900</td><td>4,812,900</td><td><span class="chip pass">PASS</span></td></tr>
+      <tr><td>Missing keys</td><td colspan="2">5 ids in source, not in target</td><td><span class="chip fail">FAIL</span></td></tr>
+      <tr><td>Duplicate keys</td><td colspan="2">0 duplicates</td><td><span class="chip pass">PASS</span></td></tr>
+    </table>
+    <p style="font-size:14px;color:var(--muted);margin-top:-2px">A threshold (e.g. target &gt; 5% below source) can auto-fail the pipeline before bad data spreads.</p>
+
+    <h2>Six dimensions to cover</h2>
+    <table class="cmp">
+      <tr><th>Dimension</th><th>Example check to ask AI for</th></tr>
+      <tr><td>Completeness</td><td>Row counts source vs target; mandatory fields not NULL.</td></tr>
+      <tr><td>Accuracy / Validity</td><td>Rows where status isn't in the allowed set, or dates out of range.</td></tr>
+      <tr><td>Consistency</td><td>Total amount in source = total in target, per key.</td></tr>
+      <tr><td>Uniqueness</td><td>Keys appearing more than once within a load.</td></tr>
+      <tr><td>Integrity</td><td>Target rows whose foreign key has no parent (orphans).</td></tr>
+      <tr><td>Timeliness</td><td>Loads that landed late, or periods missing expected rows.</td></tr>
+    </table>
+    <div class="card"><span class="label prompt">Design then generate</span><pre><code>You are a QA lead reconciling a source system and a warehouse after
+an ETL load. List the test cases for one dataset/period covering all
+six dimensions — name, what it proves, pass criterion. Then write the
+SQL for "duplicate key within load" (pass = zero rows).</code></pre></div>
+    <div class="callout warn"><h3>AI drafts the test — you own the verdict</h3><p>Validate a generated recon query against data you know is correct before trusting it on new data.</p></div>
+  </section>
+
+  <!-- ERRORS -->
+  <section class="panel" id="errors" role="tabpanel">
+    <p class="eyebrow red">Apply · Debugging</p>
+    <h1>SQL Errors &amp; Fixes</h1>
+    <p class="lead">An error message is the most useful thing you can give an AI. Paste the exact text plus the code, and you usually get the cause and fix faster than searching.</p>
+
+    <h2>The debugging loop</h2>
+    <div class="svgwrap">
+      <svg viewBox="0 0 720 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Debugging loop: error, context, diagnose, fix, verify">
+        <defs><marker id="eah" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7C879C"/></marker></defs>
+        <g font-family="-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" text-anchor="middle">
+          <rect x="14" y="38" width="116" height="40" rx="9" fill="#FCEBED" stroke="#D62839"/><text x="72" y="62" fill="#A11321">Error</text>
+          <rect x="160" y="38" width="116" height="40" rx="9" fill="#EAF0FC" stroke="#2B5BD7"/><text x="218" y="56" fill="#1B3A8C">+ Code &amp;</text><text x="218" y="70" fill="#1B3A8C">context</text>
+          <rect x="306" y="38" width="116" height="40" rx="9" fill="#F0EAFB" stroke="#7A3FC0"/><text x="364" y="62" fill="#5b2a96">Diagnose</text>
+          <rect x="452" y="38" width="116" height="40" rx="9" fill="#EAF0FC" stroke="#2B5BD7"/><text x="510" y="62" fill="#1B3A8C">Fix</text>
+          <rect x="598" y="38" width="108" height="40" rx="9" fill="#E5F4EC" stroke="#1F8A52"/><text x="652" y="62" fill="#176b40">Verify</text>
+          <path d="M130 58 h26" stroke="#7C879C" stroke-width="2" marker-end="url(#eah)"/>
+          <path d="M276 58 h26" stroke="#7C879C" stroke-width="2" marker-end="url(#eah)"/>
+          <path d="M422 58 h26" stroke="#7C879C" stroke-width="2" marker-end="url(#eah)"/>
+          <path d="M568 58 h26" stroke="#7C879C" stroke-width="2" marker-end="url(#eah)"/>
+          <path d="M652 80 v16 h-580 v-16" fill="none" stroke="#7C879C" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#eah)"/>
+          <text x="362" y="104" fill="#7C879C" font-weight="400" font-size="10">if it recurs, ask: what pattern do I change so it never happens again?</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="card"><span class="label prompt">Copy this shape</span><pre><code>Error: [paste the FULL error, including the Msg number]
+Code that produced it: [just the relevant lines]
+Environment: SQL Server 2019. Expected: [intended result].
+Most likely cause first, then the exact fix. Rank if several.</code></pre></div>
+
+    <h2>Real errors → cause → fix</h2>
+    <table class="cmp">
+      <tr><th>Message</th><th>Cause · fix</th></tr>
+      <tr><td>Msg 245 — conversion failed, varchar 'xyz' to int</td><td>Text where a number is expected. Wrap in <code>TRY_CAST()</code>/<code>TRY_CONVERT()</code> (returns NULL on failure) or filter bad rows in <code>WHERE</code>.</td></tr>
+      <tr><td>Msg 242 — varchar to datetime out of range</td><td>Ambiguous/invalid date string. Validate the source, or <code>TRY_CONVERT(date, val, &lt;style&gt;)</code> with an explicit format.</td></tr>
+      <tr><td>String or binary data would be truncated</td><td>Value too long for the column. Widen the column, or trim/validate input. SQL Server 2019 names the offending column for you.</td></tr>
+      <tr><td>Msg 8134 — divide by zero</td><td>A denominator is 0. Use <code>NULLIF(denominator, 0)</code> so the row returns NULL instead of erroring.</td></tr>
+      <tr><td>Msg 1205 — deadlock victim</td><td>Two transactions locked resources in opposite order. Access tables in a consistent order, keep transactions short, add indexes, and add retry logic.</td></tr>
+    </table>
+
+    <h2>A real before / after</h2>
+    <div class="recipe">
+      <div class="pane-dark"><div class="pt">You paste</div>Msg 8134, Level 16, State 1<br>Divide by zero error encountered.<br><br>SELECT region, sales/target AS pct FROM kpi;</div>
+      <div class="pane-soft"><div class="pt">You get back</div><p>"A <code>target</code> of 0 causes it. Guard the denominator:"</p><pre style="margin:6px 0 0;background:#0E1E3F"><code>SELECT region,
+  sales / NULLIF(target,0) AS pct
+FROM kpi;</code></pre></div>
+    </div>
+
+    <div class="handson"><div class="handson-head"><span class="level adv">Advanced</span><span class="ttl">Fix the pattern, not the bug</span></div><div class="handson-body"><pre><code>That fixed it. Why did it happen, and what should I change so it
+stops recurring? Give me a short rule I can apply everywhere.</code></pre></div></div>
+    <div class="callout warn"><h3>Strip the secrets first</h3><p>Delete server names, paths, and real data from stack traces before pasting.</p></div>
+  </section>
+
+  <!-- PRODUCTIVITY -->
+  <section class="panel" id="productivity" role="tabpanel">
+    <p class="eyebrow">Apply · Daily Productivity</p>
+    <h1>Productivity &amp; Communication</h1>
+    <p class="lead">Beyond code, most time goes to writing, summarising, and planning. Quiet wins — hours back each week — when you pair good frameworks with AI to do the drafting.</p>
+
+    <div class="grid two">
+      <div class="card"><h3 style="margin-top:0">Status updates (STAR)</h3><p>"Turn my notes into a weekly update: Completed / In progress / Blockers / Next week. Under 200 words."</p></div>
+      <div class="card"><h3 style="margin-top:0">Meeting notes → MoM</h3><p>"Convert these notes into Minutes of Meeting: decisions, action items with owner + deadline, next steps."</p></div>
+      <div class="card"><h3 style="margin-top:0">Plan my day</h3><p>"Rank these tasks by urgency × importance, build a time-blocked schedule, flag what moves to tomorrow."</p></div>
+      <div class="card"><h3 style="margin-top:0">Email &amp; docs</h3><p>"Rewrite this clearer, professional, shorter." "Draft a README for this procedure."</p></div>
+    </div>
+
+    <h2>The Priority Matrix — decide what to do now</h2>
+    <p>Every task is some mix of <strong>urgent</strong> and <strong>important</strong>. The quadrant tells you the action.</p>
+    <div class="matrix">
+      <div class="mq do"><div class="qh">Urgent + Important</div><h3>Do first</h3><p>Crises, today's deadlines, a manager's ask. Example: report due in 2 hours.</p></div>
+      <div class="mq sched"><div class="qh">Not urgent + Important</div><h3>Schedule</h3><p>Planning, learning, deep work. Example: build your tracker template.</p></div>
+      <div class="mq deleg"><div class="qh">Urgent + Not important</div><h3>Delegate / minimise</h3><p>Interruptions, some meetings. Example: a "quick chat" that someone else could field.</p></div>
+      <div class="mq elim"><div class="qh">Not urgent + Not important</div><h3>Eliminate</h3><p>Busywork and scrolling. Example: reorganising your desk again.</p></div>
+    </div>
+
+    <h2>The weekly update, at a glance</h2>
+    <p>Your manager can't see inside your head. This four-block structure builds trust faster than almost anything.</p>
+    <div class="svgwrap">
+      <svg viewBox="0 0 720 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Weekly status update structure">
+        <g font-family="-apple-system,Segoe UI,sans-serif" font-size="12.5" font-weight="700" text-anchor="middle">
+          <rect x="14" y="30" width="166" height="70" rx="11" fill="#E5F4EC" stroke="#1F8A52"/><text x="97" y="60" fill="#176b40">✓ Completed</text><text x="97" y="80" fill="#43506A" font-weight="400" font-size="11">what shipped</text>
+          <rect x="194" y="30" width="166" height="70" rx="11" fill="#EAF0FC" stroke="#2B5BD7"/><text x="277" y="60" fill="#1B3A8C">⟳ In progress</text><text x="277" y="80" fill="#43506A" font-weight="400" font-size="11">% + ETA</text>
+          <rect x="374" y="30" width="166" height="70" rx="11" fill="#FCEBED" stroke="#D62839"/><text x="457" y="60" fill="#A11321">⚠ Blockers</text><text x="457" y="80" fill="#43506A" font-weight="400" font-size="11">what you need</text>
+          <rect x="554" y="30" width="152" height="70" rx="11" fill="#F0EAFB" stroke="#7A3FC0"/><text x="630" y="60" fill="#5b2a96">→ Next week</text><text x="630" y="80" fill="#43506A" font-weight="400" font-size="11">top 3 priorities</text>
+        </g>
+      </svg>
+    </div>
+
+    <h2>MoSCoW — for any task list</h2>
+    <table class="cmp">
+      <tr><th>Priority</th><th>Meaning · action</th></tr>
+      <tr><td>Must have</td><td>Critical; hard deadline or blocks others. Do first, no exceptions.</td></tr>
+      <tr><td>Should have</td><td>Important but survivable if it slips a day. Do after Musts.</td></tr>
+      <tr><td>Could have</td><td>Nice to have, no hard deadline. Do if time permits.</td></tr>
+      <tr><td>Won't have (now)</td><td>Not this period. Defer or drop.</td></tr>
+    </table>
+
+    <div class="callout tip"><h3>"Never miss twice"</h3><p>If you skip AI on a task where it clearly would have helped, use it next time. The habit compounds — and the frameworks above give it structure.</p></div>
+  </section>
+
+  <!-- CHEAT SHEET -->
+  <section class="panel" id="cheat" role="tabpanel">
+    <p class="eyebrow purple">Always-Open Reference</p>
+    <h1>AI learning cheat sheet</h1>
+    <p class="lead">One screen, everything that matters. Keep it open beside your work — or print it.</p>
+    <div class="cheat">
+      <div class="ccard"><h4>5-Element Prompt</h4><ul><li><strong>Role</strong> — who the AI is</li><li><strong>Task</strong> — one clear action</li><li><strong>Context</strong> — data, spec, error</li><li><strong>Format</strong> — the output shape</li><li><strong>Constraints</strong> — limits &amp; rules</li></ul></div>
+      <div class="ccard p"><h4>3 Techniques</h4><ul><li><strong>Zero-shot</strong> — just ask</li><li><strong>Few-shot</strong> — show 2–3 examples</li><li><strong>Chain-of-thought</strong> — "think step by step"</li></ul></div>
+      <div class="ccard r"><h4>Prompt Power-Ups</h4><ul><li><span class="mono">"List your assumptions."</span></li><li><span class="mono">"3 options, ranked."</span></li><li><span class="mono">"Review your own answer."</span></li><li><span class="mono">"What context would help?"</span></li></ul></div>
+      <div class="ccard p"><h4>.md &amp; Tokens</h4><ul><li>Write prompts as <strong>.md</strong> files</li><li>Structure &gt; prose = fewer tokens</li><li>~4 chars ≈ 1 token</li><li>Check: <span class="mono">platform.openai.com/tokenizer</span></li></ul></div>
+      <div class="ccard"><h4>3-Prompt Chain</h4><ul><li>1 · Plan + edge cases (no code)</li><li>2 · Generate, handling them</li><li>3 · Self-review like a PR</li></ul></div>
+      <div class="ccard g"><h4>Ground Rules</h4><ul><li>Verify before you trust</li><li>Never run unreviewed on prod</li><li>No secrets or real personal data</li><li>It's a draft engine</li></ul></div>
+      <div class="ccard"><h4>Learning Loop</h4><ul><li>Learn → Apply → Reflect → Share</li><li>30 min/day on real work</li><li>One technique a week</li><li>Never miss twice</li></ul></div>
+      <div class="ccard p"><h4>Skill Ladder</h4><ul><li>Curious → Fluent</li><li>→ Power user → Builder</li><li>Climb one rung at a time</li></ul></div>
+      <div class="ccard"><h4>Which Tool</h4><ul><li><strong>Claude</strong> — long docs, nuance</li><li><strong>ChatGPT</strong> — brainstorming, code</li><li><strong>Gemini</strong> — Google + research</li><li><strong>Copilot</strong> — Excel/Office</li><li><strong>Perplexity</strong> — cited research</li></ul></div>
+      <div class="ccard r"><h4>Dev Tools</h4><ul><li><strong>Claude Code</strong> — terminal agent</li><li><strong>Codex CLI</strong> — terminal, ChatGPT</li><li><strong>Firebase Studio</strong> — app from a prompt</li><li><strong>Copilot</strong> — inline completions</li></ul></div>
+      <div class="ccard g"><h4>Agent in 5 Steps</h4><ul><li>1 · Define the job (1 sentence)</li><li>2 · Pick no-code or code</li><li>3 · Give context + 2–4 tools</li><li>4 · Add guardrails + "done"</li><li>5 · Test &amp; refine</li></ul></div>
+      <div class="ccard p"><h4>Claude Skills</h4><ul><li>Folder + <strong>SKILL.md</strong></li><li>Frontmatter: name + description</li><li>Description = the trigger</li><li>Loads only when relevant</li><li>Works in Claude.ai · Code · API</li></ul></div>
+      <div class="ccard"><h4>Excel Top 10</h4><ul><li><span class="mono">F2 F4 Ctrl+Arrow</span></li><li><span class="mono">Ctrl+Shift+Arrow Ctrl+D</span></li><li><span class="mono">Alt+= Ctrl+Z Ctrl+S</span></li><li><span class="mono">Ctrl+T Ctrl+1</span></li></ul></div>
+      <div class="ccard p"><h4>Free Courses</h4><ul><li>Claude 101</li><li>AI Fluency</li><li>Agent Skills</li><li><span class="mono">anthropic.skilljar.com</span></li></ul></div>
+    </div>
+    <div class="callout tip"><h3>Print it</h3><p>Use your browser's Print (Ctrl/Cmd+P) on this tab to keep the cheat sheet at your desk.</p></div>
+  </section>
+
+  <!-- LEARNING PATH / COURSES -->
+  <section class="panel" id="learning" role="tabpanel">
+    <p class="eyebrow">The Curriculum</p>
+    <h1>Free courses &amp; further reading</h1>
+    <p class="lead">Every Anthropic Academy course below is free, self-paced, and awards a completion certificate. Sign in: <a href="https://anthropic.skilljar.com/" target="_blank" rel="noopener">anthropic.skilljar.com</a> · hub: <a href="https://www.anthropic.com/learn" target="_blank" rel="noopener">anthropic.com/learn</a></p>
+
+    <div class="phase p1"><div class="pn">1</div><div class="pc"><h3>Foundation — Weeks 1–3</h3><div class="meta">Everyone · ~2–3 hrs</div><ul><li>Learn: Prompting, Context, Tips &amp; Tricks.</li><li>Course: <a href="https://anthropic.skilljar.com/claude-101" target="_blank" rel="noopener">Claude 101</a>.</li></ul></div></div>
+    <div class="phase p2"><div class="pn">2</div><div class="pc"><h3>Applied — Weeks 4–7</h3><div class="meta">Role-based</div><ul><li>Learn: the 8-Week Program + Apply tabs.</li><li>Course: <a href="https://anthropic.skilljar.com/ai-fluency-framework-foundations" target="_blank" rel="noopener">AI Fluency: Framework &amp; Foundations</a>.</li></ul></div></div>
+    <div class="phase p3"><div class="pn">3</div><div class="pc"><h3>Builder — Week 8+</h3><div class="meta">Ongoing</div><ul><li>Learn: AI Dev Tools + Build an Agent.</li><li>Courses: <a href="https://anthropic.skilljar.com/introduction-to-agent-skills" target="_blank" rel="noopener">Agent Skills</a>, <a href="https://anthropic.skilljar.com/claude-code-101" target="_blank" rel="noopener">Claude Code 101</a>.</li></ul></div></div>
+
+    <h2>Start here — no coding needed</h2>
+    <div class="card">
+      <div class="res-link"><div class="num">1</div><div class="body"><h3><a href="https://anthropic.skilljar.com/claude-101" target="_blank" rel="noopener">Claude 101</a></h3><p>Using AI for everyday work. Take this first.<span class="url">anthropic.skilljar.com/claude-101</span></p></div></div>
+      <div class="res-link"><div class="num">2</div><div class="body"><h3><a href="https://anthropic.skilljar.com/ai-fluency-framework-foundations" target="_blank" rel="noopener">AI Fluency: Framework &amp; Foundations</a></h3><p>What to delegate, what not to.<span class="url">anthropic.skilljar.com/ai-fluency-framework-foundations</span></p></div></div>
+      <div class="res-link"><div class="num">3</div><div class="body"><h3><a href="https://anthropic.skilljar.com/ai-capabilities-and-limitations" target="_blank" rel="noopener">AI Capabilities and Limitations</a></h3><p>What these models can and can't do.<span class="url">anthropic.skilljar.com/ai-capabilities-and-limitations</span></p></div></div>
+      <div class="res-link"><div class="num">4</div><div class="body"><h3><a href="https://anthropic.skilljar.com/introduction-to-claude-cowork" target="_blank" rel="noopener">Introduction to Claude Cowork</a></h3><p>Working alongside AI on your real files.<span class="url">anthropic.skilljar.com/introduction-to-claude-cowork</span></p></div></div>
+    </div>
+
+    <h2>Go deeper — builders &amp; developers</h2>
+    <div class="card">
+      <div class="res-link"><div class="num">5</div><div class="body"><h3><a href="https://anthropic.skilljar.com/introduction-to-agent-skills" target="_blank" rel="noopener">Introduction to Agent Skills</a></h3><p>Build, configure, and share reusable Skills.<span class="url">anthropic.skilljar.com/introduction-to-agent-skills</span></p></div></div>
+      <div class="res-link"><div class="num">6</div><div class="body"><h3><a href="https://anthropic.skilljar.com/claude-code-101" target="_blank" rel="noopener">Claude Code 101</a></h3><p>The coding agent in a daily workflow.<span class="url">anthropic.skilljar.com/claude-code-101</span></p></div></div>
+      <div class="res-link"><div class="num">7</div><div class="body"><h3><a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank" rel="noopener">Building with the Claude API</a></h3><p>Working with the models programmatically.<span class="url">anthropic.skilljar.com/claude-with-the-anthropic-api</span></p></div></div>
+      <div class="res-link"><div class="num">8</div><div class="body"><h3><a href="https://anthropic.skilljar.com/introduction-to-model-context-protocol" target="_blank" rel="noopener">Introduction to Model Context Protocol</a></h3><p>Connect AI to databases, APIs, and tools via MCP.<span class="url">anthropic.skilljar.com/introduction-to-model-context-protocol</span></p></div></div>
+    </div>
+
+    <h2>Tool docs &amp; further reading</h2>
+    <div class="card">
+      <div class="res-link"><div class="num">›</div><div class="body"><h3><a href="https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank" rel="noopener">Prompt engineering guide</a></h3><p>The official reference behind the Prompting &amp; Context tabs.<span class="url">docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview</span></p></div></div>
+      <div class="res-link"><div class="num">›</div><div class="body"><h3><a href="https://docs.claude.com/en/docs/agents-and-tools/agent-skills" target="_blank" rel="noopener">Agent Skills overview</a></h3><p>What Skills are and how to write one.<span class="url">docs.claude.com/en/docs/agents-and-tools/agent-skills</span></p></div></div>
+      <div class="res-link"><div class="num">›</div><div class="body"><h3><a href="https://developers.openai.com/codex/cli" target="_blank" rel="noopener">OpenAI Codex CLI docs</a></h3><p>Install and run the Codex terminal agent.<span class="url">developers.openai.com/codex/cli</span></p></div></div>
+      <div class="res-link"><div class="num">›</div><div class="body"><h3><a href="https://firebase.google.com/docs/studio" target="_blank" rel="noopener">Firebase Studio docs</a></h3><p>Build full-stack AI apps with Gemini.<span class="url">firebase.google.com/docs/studio</span></p></div></div>
+    </div>
+    <div class="callout tip"><h3>You don't need all of it</h3><p>Two courses and the habit of writing a clear prompt get most people 80% of the value. Start small, use it on real work this week.</p></div>
+  </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>AI Enablement Playbook</strong> · Master Edition v5.2 — learn, build, and work with AI. An 8-week structured program plus prompting, context, AI dev tools, Skills, agents, and applied data &amp; QA guidance.</p>
+    <p>Internal use. AI output is a draft to be reviewed, never a system of record. Never share secrets, credentials, or live personal data. Verify all generated code &amp; SQL before running. Course links → Anthropic Academy (free); tool links are third-party references.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var tabs=document.querySelectorAll('.snav'),panels=document.querySelectorAll('.panel'),crumb=document.getElementById('crumb');
+  var sub=document.getElementById('sub-program'),parent=document.querySelector('.snav-parent');
+  function lblOf(id){var b=document.querySelector('.snav[data-target="'+id+'"] .lbl');return b?b.textContent:'';}
+  function inProgram(id){return id==='program'||/^wk/.test(id);}
+  function crumbFor(id){
+    if(id==='program') return '8-Week Program';
+    if(/^wk/.test(id)) return '8-Week Program · '+lblOf(id);
+    return lblOf(id);
+  }
+  function show(id){
+    panels.forEach(function(p){p.classList.toggle('active',p.id===id);});
+    tabs.forEach(function(t){t.classList.toggle('active',t.dataset.target===id);});
+    if(inProgram(id)){
+      sub.classList.add('open');
+      parent.classList.add('open'); parent.setAttribute('aria-expanded','true');
+      if(id!=='program') parent.classList.add('section-active'); else parent.classList.remove('section-active');
+    } else {
+      sub.classList.remove('open');
+      parent.classList.remove('open','section-active'); parent.setAttribute('aria-expanded','false');
+    }
+    crumb.textContent=crumbFor(id);
+    document.body.classList.remove('navopen');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function setSub(open){
+    sub.classList.toggle('open',open);
+    parent.classList.toggle('open',open);
+    parent.setAttribute('aria-expanded',open?'true':'false');
+  }
+  tabs.forEach(function(t){
+    if(t.classList.contains('snav-parent')) return;
+    t.addEventListener('click',function(){show(t.dataset.target);});
+  });
+  parent.addEventListener('click',function(){
+    if(sub.classList.contains('open')){ setSub(false); }
+    else { setSub(true); show('program'); }
+  });
+  document.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();show(b.dataset.go);});});
+  document.getElementById('collapseBtn').addEventListener('click',function(){document.body.classList.toggle('collapsed');});
+  document.getElementById('menuBtn').addEventListener('click',function(){document.body.classList.toggle('navopen');});
+  document.getElementById('backdrop').addEventListener('click',function(){document.body.classList.remove('navopen');});
+})();
+</script>
+
+</body>
+</html>
